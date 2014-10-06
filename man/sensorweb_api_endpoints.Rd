@@ -16,6 +16,6 @@ sensorweb_api_endpoints()
 sensorweb_index(sensorweb_api_endpoints()[[1]])
 }
 \author{
-Daniel Nüst \email{d.nuest@52north.org}
+Daniel Nuest \email{d.nuest@52north.org}
 }
 

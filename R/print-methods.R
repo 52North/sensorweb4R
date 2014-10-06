@@ -27,22 +27,21 @@
 #
 
 
-#' Example API endpoints.
+#' Print and toString functions
 #'
-#' \code{sensorweb_api_endpoints} returns a list of endpoints that can be used for testing.
-#'
-#' @return R object with the further endpoints offered by the service
-#' @author Daniel Nuest \email{d.nuest@@52north.org}
-#'
-#' @export
-#'
-#' @examples
-#' sensorweb_api_endpoints()
-#' sensorweb_index(sensorweb_api_endpoints()[[1]])
-sensorweb_api_endpoints <- function() {
-    .endpoints <- list("52N Demo" = "http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/",
-                       "IRCEL-CELINE" = "http://sosrest.irceline.be/api/v1/",
-                       "WV" = "http://www.fluggs.de/sos2/api/v1/",
-                       "Geonovum" = "http://sensors.geonovum.nl/sos/api/v1/")
-    return(.endpoints)
+#' @param x the object to print
+#' @name print
+NULL
+
+.toString.SensorwebEndpoint <- function(x, ...) {
+    .s <- paste("Object of class SensorwebEndpoint;\n",
+                "url: ", x@url)
+    return(.s)
 }
+.print.SensorwebEndpoint <- function(x, ...) {
+    cat(.toString.SensorwebEndpoint(x, ...), "\n")
+    invisible(x)
+}
+
+setMethod("print", "SensorwebEndpoint", function(x, ...) .print.SensorwebEndpoint(x, ...))
+setMethod("toString", "SensorwebEndpoint", function(x, ...) .toString.SensorwebEndpoint(x, ...))

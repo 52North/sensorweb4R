@@ -7,6 +7,8 @@ sensorweb_index(url, ...)
 }
 \arguments{
 \item{url}{The API endpoint to use}
+
+\item{...}{Further arguments passed on to \code{GET}}
 }
 \value{
 R object with the further endpoints offered by the service
@@ -19,6 +21,6 @@ the sensor web API.
 sensorweb_index(sensorweb_api_endpoints()[[1]])
 }
 \author{
-Daniel Nüst \email{d.nuest@52north.org}
+Daniel Nuest \email{d.nuest@52north.org}
 }
 

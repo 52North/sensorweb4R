@@ -33,8 +33,9 @@
 #' the sensor web API.
 #'
 #' @param url The API endpoint to use
+#' @param ... Further arguments passed on to \code{GET}
 #' @return R object with the further endpoints offered by the service
-#' @author Daniel Nüst \email{d.nuest@@52north.org}
+#' @author Daniel Nuest \email{d.nuest@@52north.org}
 #'
 #' @export
 #' @import httr
@@ -47,7 +48,7 @@ sensorweb_index <- function(url, ...) {
 
     #flog.info("Requesting index from %s", url)
 
-    response <- GET(url)
+    response <- GET(url, ...)
     #flog.debug("Response: %s", response)
 
     content <- parsed_content(response)

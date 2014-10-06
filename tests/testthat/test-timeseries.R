@@ -1,10 +1,10 @@
 context("/api/v1/timeseries")
 
 test_that("Test that first and last value of a specific timeseries can be requested", {
-    response <- GET("http://sosrest.irceline.be/api/v1/timeseries/ts_b78a49c9489501558f15b6fe82f5ca9b")
-    response.content <- content(response)
+    endpoint <- new("SensorwebEndpoint", url = sensorweb_api_endpoints()[[2]])
 
-    expect_equal(response.content[["firstValue"]][["value"]], 1.965, info = response[["url"]])
+    response.content <- timeseries(endpoint, id = "ts_b78a49c9489501558f15b6fe82f5ca9b")
+    expect_equal(response.content[["firstValue"]][["value"]], 1.965, info = toString(endpoint))
     # real time data, cannot test last value.. expect_equal(response.content[["lastValue"]][["value"]], 3.4, info = response[["url"]])
 })
 

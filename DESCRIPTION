@@ -12,6 +12,7 @@ LazyData: true
 URL: https://github.com/52North/sensorweb4R
 BugReports: https://github.com/52North/sensorweb4R/issues
 Imports:
-    futile.logger
+    futile.logger,
+    httr
 Suggests:
     testthat

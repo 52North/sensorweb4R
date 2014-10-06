@@ -29,8 +29,34 @@
 
 # http://adv-r.had.co.nz/S4.html
 
+#' An S4 class to represent a sensor web API endpoint
+#'
+#' @slot url The URL for the API instance
+setClass("SensorwebEndpoint",
+         representation(url = "character"))
+
 #' An S4 class to represent a time series.
 #'
 #' @slot id The identifier for the timeseries
 setClass("Timeseries",
-         representation(id = "character"))
+         representation(id = "character",
+                        endpoint = "SensorwebEndpoint"))
+
+#' Test function
+#'
+#'
+#' @param endpoint An object of class \code{SensorwebEndpoint}
+#' @param id The identifier of the timeseries to request from the endpoint
+#'
+#' @import httr
+#' @export
+timeseries <- function(endpoint, id) {
+    .path <- paste0(endpoint@url, "timeseries/", id)
+    flog.debug("Requesting %s", .path)
+
+    response <- GET(.path)
+#     cat(capture.output(str(response)))
+
+    response.content <- content(response)
+    return(response.content)
+}
