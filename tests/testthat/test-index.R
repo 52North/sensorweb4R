@@ -1,0 +1,15 @@
+context("Index")
+
+test_that("Index contains all elements", {
+    check_test_api()
+    response <- sensorweb_index(check_test_api())
+    expect_equal(length(response), 8)
+    expect_true("services" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("stations" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("timeseries" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("categories" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("offerings" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("features" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("procedures" %in% sapply(X = response, FUN = "[[", "id"))
+    expect_true("phenomena" %in% sapply(X = response, FUN = "[[", "id"))
+})
