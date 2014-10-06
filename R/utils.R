@@ -1,4 +1,4 @@
-# Copyright (C) 2014 52\u00b0North Initiative for Geospatial Open Source
+# Copyright (C) 2014 52°North Initiative for Geospatial Open Source
 # Software GmbH
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -26,27 +26,48 @@
 # Public License for more details.
 #
 
-
 #' License header
 #'
-#' \code{license_header} adds license headers to all the R source code files of the package.
+#' \code{license_header} check if license header is present in all the R source code files of the package.
 #'
 #' @param pkg package name, used in \code{devtools:::find_code(..)}.
 #' @param header a path to the header file to be used
-#' @param add boolean variable
-#' @return A message of the result of the function, including the files that were changed (if any).
+#' @param add boolean variable for automatically adding the header if it is missing - \emph{BETA},
+#'      the function will not replace an existing but slightly different header!
+#' @return A human readable message of the result of the function, including the files that were changed (if any).
 #' @examples
 #' \dontrun{
 #'  license_header()
 #' }
+#' @import futile.logger
 license_header <- function(pkg = ".", header = "inst/license-header", add = FALSE) {
-    # TODO add check if devtools is installed, otherwise don't execute function
+    if (!requireNamespace("devtools", quietly = TRUE)) {
+        stop("devtools required to run license_header(). Please install.", call. = FALSE)
+    }
 
-    files <- devtools:::find_code(devtools:::as.package("."))
+    files <- devtools:::find_code(devtools:::as.package(pkg))
     flog.debug("Checking license headers of %s files using '%s', adding if missing = %s", length(files), header, add)
 
     .result <- .addLicenseHeaderToFiles(files, header, add)
     return(.result)
+}
+
+#' License header check
+#'
+#' \code{has_license_header} checks if license header is present in all the R source code files of the package using \code{licesen_header()}.
+#'
+#' @inheritParams license_header
+#' @return \code{TRUE} if all files have the header, \code{FALSE} otherwise.
+#' @examples
+#' \dontrun{
+#'  has_license_header()
+#' }
+#' @import futile.logger
+has_license_header <- function(pkg = ".", header = "inst/license-header") {
+    .result <- license_header(pkg = pkg, header = header)
+    .substr <- substr(.result, 1, 7)
+    .substr <- tolower(.substr)
+    return(.substr == "success")
 }
 
 .linesHaveHeader <- function(lines, header_content) {
@@ -85,8 +106,6 @@ license_header <- function(pkg = ".", header = "inst/license-header", add = FALS
         fConn <- file(f, 'r+')
         lines <- readLines(fConn)
 
-        cat("line 0 ", lines[1], "\n")
-
         hasHeader <- .linesHaveHeader(lines, header_content)
         if(hasHeader)
             flog.trace("File %s already has a header", f)
@@ -105,10 +124,19 @@ license_header <- function(pkg = ".", header = "inst/license-header", add = FALS
 
     flog.trace("%s files missing header: %s", length(files_missing_header), toString(files_missing_header))
     if(length(files_missing_header) < 1)
-        return(paste0("All files have the license header specified in ", header))
-    else return(paste0("Files missing the header: ", paste0(files_missing_header)))
+        return(paste0("Success: All files have the license header specified in ", header))
+    else return(paste0("Failure: Files missing the header: ", paste0(files_missing_header)))
 }
 
 
+# function is used within many tests
+check_test_api <- function() {
+    .url <- sensorweb_api_endpoints()[[1]]
+    response <- GET(.url)
 
+    if (!url_ok(.url)) {
+        skip(paste0("testing API not available at ", .url))
+    }
 
+    return(.url)
+}

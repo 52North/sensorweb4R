@@ -1,4 +1,4 @@
-# Copyright (C) 2014 52\u00b0North Initiative for Geospatial Open Source
+# Copyright (C) 2014 52°North Initiative for Geospatial Open Source
 # Software GmbH
 #
 # This program is free software; you can redistribute it and/or modify it
@@ -52,7 +52,6 @@ NULL # documenting null to integrate this comment into a specific rd file via @n
     op <- options()
     op.sensorweb4R <- list(
         sensorweb4R.defaultApiVersion = "v1",
-        sensorweb4R.defaultLoggerThreshold = "INFO",
         sensorweb4R.loggerLayout = "[~l] [~t] [~n.~f] ~m"
     )
     toset <- !(names(op.sensorweb4R) %in% names(op))
@@ -62,10 +61,13 @@ NULL # documenting null to integrate this comment into a specific rd file via @n
 }
 
 .onAttach <- function(libname, pkgname) {
-    flog.threshold(options("sensorweb4R.defaultLoggerThreshold"), name = "sensorweb4R")
-    flog.layout(options("sensorweb4R.loggerLayout"), name =  "sensorweb4R")
+    #flog.threshold(options("sensorweb4R.defaultLoggerThreshold"), name = "sensorweb4R")
+    # cannot set via string variable, calling also does not work... call(paste0("flog.threshold(", options("sensorweb4R.defaultLoggerThreshold"), ", name = 'sensorweb4R')"))
+    flog.threshold(INFO, name = "sensorweb4R")
+    .layout <- layout.format(options("sensorweb4R.loggerLayout"))
+    flog.layout(.layout, name =  "sensorweb4R")
 
-    packageStartupMessage("Welcome to sensorweb4R! The logging level is ", flog.threshold())
+    packageStartupMessage("Welcome to sensorweb4R! The logging level is ", flog.threshold(), " - set it with 'flog.threshold(<level>, name = \"sensorweb4R\")'")
 }
 
 
