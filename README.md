@@ -2,6 +2,8 @@
 
 R extension package to integrate sensor data into R using the [52°North Sensor Web Client API](https://wiki.52north.org/bin/view/SensorWeb/SensorWebClientRESTInterface).
 
+[![Build Status](https://travis-ci.org/52North/sensorweb4R.png?branch=master)](https://travis-ci.org/52North/sensorweb4R)
+
 ## Installation
 
 The sensorweb4R package is not on CRAN yet, so please download and install the package manually. The first option is using the package ``devtools``, which also works well for your own fork or development versions by other contributors.
@@ -26,8 +28,8 @@ R CMD INSTALL sensorweb4R
 Take a look at the demos to see how to use the package:
 
 ```
-library(enviroCaR)
-demo(import)
+library(sensorweb4R)
+demo(package = "sensorweb4R")
 ```
 
 Futher user documentation is in the R help and the vignettes:
@@ -40,13 +42,13 @@ vignette("<name of the vignette to open")
 
 ### Developers 
 
-Developer documentation is in this read-me file.
+Developer documentation is in this file ``README.md``.
 
 ## Contact / Support
 
 Please direct support questions to the 52°North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).
 
-Add an issue/comment on GitHub if you found a bug or want to collaborate on a new features.
+Add an issue/comment on GitHub if you found a bug or want to collaborate on new features.
 
 ## License
 

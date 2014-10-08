@@ -15,4 +15,8 @@ Imports:
     futile.logger,
     httr
 Suggests:
-    testthat
+    testthat,
+    knitr,
+    devtools,
+    pander
+VignetteBuilder: knitr

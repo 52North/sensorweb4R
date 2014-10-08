@@ -1,0 +1,417 @@
+---
+title: "sensorweb4R: Accessing Sensor Web Serverices from R"
+author: "Daniel Nuest"
+date: "`r Sys.Date()`"
+output:
+    rmarkdown::html_vignette:
+        fig_caption: yes
+        toc: true
+    pdf_document:
+        toc: true
+        toc_depth: 2
+        number_sections: true
+        highlight: pygments
+vignette: >
+  %\VignetteIndexEntry{sensorweb4R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+<!--
+render("vignettes//sensorweb4R.Rmd", "all")
+-->
+
+# Introduction
+
+## About / Features
+
+The `R` extension package `sensorweb4R` provides functions and classes to download data from sensor web services. These services contain timeseries of sensor data, such as temperature measurements of weather stations or pollution data from air quality stations. You can retrieve specific subsets of data from the services using plain R function calls. These datasets are loaded into your session as ready-to-use data structures.
+
+Currently, the following web service APIs are supported:
+
+* [52North Timeseries API](https://wiki.52north.org/bin/view/SensorWeb/SensorWebClientRESTInterface)
+    
+    The Timeseries API is a web service interface to publish and explore time series data in a way that is tailored to thin web clients, e.g. JavaScript. It uses a [RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer) approach and returns data encoded in [JSON](http://json.org/).
+
+A related package is `sos4R` ([on CRAN](http://cran.r-project.org/web/packages/sos4R)), which provides similar functionality to download timeseries from a standardized OGC Sensor Observation Service.
+
+## Quick Start
+
+The `sensorweb4R` package is not on CRAN yet, so please download and install the package manually, for example using [devtools](https://github.com/hadley/devtools).
+
+```{r, eval = FALSE}
+require(devtools)
+devtools::install_github("52North/sensorweb4R")
+```
+
+Then load the package and take a look at the help, demos, and the vignette:
+
+```{r, echo=FALSE, message=FALSE}
+require(sensorweb4R)
+```
+```{r, eval = FALSE}
+?sensorweb4R
+demo(package = "sensorweb4R")
+vignette(package = "sensorweb4R")
+vignette("<name of the vignette to open")
+```
+
+Some API endpoints to explore are build in:
+
+```{r}
+sensorweb4R:::sensorweb_api_endpoints()
+```
+
+## Terms and Definitions
+
+* **Sensor Web** and **OGC Sensor Web Enablement (SWE)**: "The concept of the "sensor web" is a type of sensor network that is especially well suited for environmental monitoring. [...] OGC's Sensor Web Enablement (SWE) framework defines a suite of web service interfaces and communication protocols abstracting from the heterogeneity of sensor (network) communication." [1]
+
+
+# Accessing the Timeseries API
+
+For detailed information about the Timeseries API, please check the [API documentation](http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api-doc/index.html), which provides the normative definitions of terms and functions used or explained in this document.
+
+## Common query parameters
+
+http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api-doc/index.html#general-common-query-parameters
+
+## Exploring Available Timeseries
+
+Tasks a user should be able to do:
+* index file
+* querying / searching with keywords, ..
+* exploring stations
+* timeseries metadata
+
+Notes for development:
+* Goal: mirror the structure of objects of the API to support
+* classes for objects defined by the API, supporting both "id/label" and "extended" versions
+  * `Timeseries`
+  * `Station`
+  * `Service`
+  * `Category`
+  * `Phenomenon`
+  * `SearchResult`
+  * `Collection`
+  * Super-class: TimeseriesAPIObject, which has a 'version' slot
+* Paging: was planned at some point and is partially specified (only the headers) but is not implemented
+* geometries use GeoJSON, check if there is a package with parsing functions for the geometries used in Timeseries API (leafletR has only ..toGeoJSON functions)
+
+### Example code for discussion of development paradigm
+
+Using **S4 classes**:
+
+```{r, eval = FALSE}
+endpoint <- SensorwebEndpoint(url = "http://sensorweb.server.org/api/v1")
+
+
+# S4
+sw_search(endpoint, q = "search term")
+# a list of matching objects of all types
+
+sw_search(endpoint, q = "search term", deep = TRUE)
+# a list of extended objects, i.e. the package automatically cals the contained hrefs for all results
+
+sw_search(endpoint, q = "search term", deep = TRUE, filter = c("station", "procedure"), dismiss = FALSE)
+# deep search only for results of the listed types, but other types are still contained in the result list
+# a list of extended objects of classes Station and Procedure
+
+timeseries(endpoint)
+# a list of Timeseries objects, all available series
+
+timeseries(endpoint, category = "..", service = "..", station = "..", phenomenon = "..")
+# a list of Timeseries fitting the defined criteria, which can be ids from the API or their labels
+
+# extended query parameters can be lists of ids, labels, or objects of the class:
+timeseries(endpoint, category = list("Air", "cat_123", categories(endpoint)[[1:2]]))
+
+t <- timeseries(endpoint)[[42]]
+url_of(t, full = TRUE)
+# a character vector with the full URL to the timeseries resource ../stations/ts_adfsasdf
+
+reference_values(t)
+# lists representing the json objects, no class
+
+parameters(t)
+
+firstValue(t)
+lastValue(t)
+# returns a vector of length one with a numeric value and the time stamp as an attribute
+
+range(t)
+# returns c(firstValue(t), lastValue(t))
+
+getData(t, content = "applicaton/json") # default
+
+getData(t, content = "applicaton/json", servie = "..", category = "..", phenomenon = "..")
+# filter with common query paremeters
+
+# the following are POST requests!
+getData(t, content = "image/png or application/pdf", file = .., style = list())
+# stores image at the given location, or in workspace
+
+getData(timeseries(endpoint)[[3:6]], ...)
+# request multiple timeseries
+
+getData(t, ..., expanded = TRUE, timespan = "PT12H/2013-08-06")
+# query temporal timespan, see xts:::.makeISO8601
+
+# query data nicely with lubridate Period class
+getData(t, ..., timespan = minutes(x = 60))
+
+# query rendedred timeseries with style and other rendeing options - minimal support only!
+getData(t, ..., renderingOptions = list(style = '{ "chartType": "line", ...}', legend = TRUE, generalize = TRUE, format = .., ))
+
+
+
+
+services(endpoint)
+stations(endpoint, extended = TRUE)
+phenomena(endpoint)
+procedures(endpoint)
+features(endpoint)
+offerings(endpoint)
+categories(endpoint)
+# a list of respective objects, all available ones - could also check the collections if these are supported/available
+
+
+collections(endpoint)
+# a list of Collection objects, listing all the available collection types and names, could be used for extended printing methods
+# this should probably be called directly when creating a new SensorwebEndpoint
+
+print(collections(endpoint)[[2]])
+# prints a collection object
+c <- collections(endpoint)[[2]]
+c$id; c$label; c$description; c$size
+
+
+s <- services(endpoint, extended = TRUE)
+is_extended([[1]])
+# returns TRUE
+
+s[["quantities"]] # a slot of the class
+s@serviceURL # a slot of the class
+s@supportsFirstLatest # returns boolean value
+
+services(endpoint, category = "..", station = "..", phenomenon = "..")
+# a list of Services objects using common query parameters
+
+services(endpoint, id = "srv_1234", ...)
+# an object of class Service, cal also use common query parameters?
+
+services(endpoint, id = c("srv_1234", "srv_567"))
+# a list of objects of class Service
+
+
+categories(endpoint)
+# a names list of the categories
+# list("Air" = "cat_1234", "Water" = "cat_567")
+
+
+stations(endpoint, id = c("st_123", "st_456", "Brussels"), expanded = TRUE)
+# a list of the stations with the given identifiers or labels
+
+stations(endpoint, category = "..", service = "..", phenomenon = "..")
+# common query parameters
+
+stations(endpoint, ...)
+# commons query parameters can be extracted from "..."
+
+stations(endpoint, ..., crs = "EPSG:25832", bbox = box, near = list(center=c(7,52), radius = 100), )
+# optional query parameters, can also utilize sp classes here, namely CRS here; bbox has the format of sp:::bbox
+
+st <- stations(endpoint)[[1]]
+
+bbox(st)
+geometry(st)
+# retrieves an object of class Spatial representing the location of the station, see sp::geometry
+coordinates(geometry(st))
+```
+
+Similar to above, but showing how this would work with **reference classes**:
+
+```{r, eval = FALSE}
+endpoint$search(q = "search term")
+
+endpoint$timeseries()
+# a list of Timeseries objects, all available series
+
+t <- endpoint$timeseries()[[42]]
+t$data(...)
+
+endpoint$stations(...)
+endpoint$services(...)
+endpoint$categories(...)
+endpoint$phenomena(...)
+
+# ... and so forth
+
+```
+
+## GETting Data
+
+* downloading timeseries data
+<!--
+render nice tables with
+```{r, results = "asis"}
+pander::pandoc.table(iris[1:3, 1:4])
+```
+-->
+* request time ranges
+* request specific stations, services, categories, phenomena
+* displaying / plotting examples (including `openair`)
+* requesting server-side plotted images, saving to workspace
+
+Testing of parsing with `jsonlite`:
+
+```{r timesries}
+require(jsonlite)
+require(RJSONIO)
+
+singleTimeseries <- '{
+  "values": [
+    {
+      "timestamp": 1376524800000,
+      "value": 433.0
+    },
+     {
+      "timestamp": 1376524860000,
+      "value": 432.4
+    },
+    {
+      "timestamp": 1376524920000,
+      "value": 432.0
+    },
+    {
+      "timestamp": 1376524980000,
+      "value": 431.1
+    }
+  ]
+}'
+
+multipleTimeseries <- '{
+  "ts_ad3edeff973ab62e39f76c14f95d1e82": {
+    "values": [
+        {
+          "timestamp": 1376524920000,
+          "value": 432.0
+        },
+        {
+          "timestamp": 1376524980000,
+          "value": 431.1
+        }
+    ]
+  },
+  "ts_c8ed5ddbb89c19b2e385de23eecbde98": {
+    "values": [
+      {
+        "timestamp": 1376589600000,
+        "value": 546
+      },
+      {
+        "timestamp": 1376589660000,
+        "value": 546.6
+      },
+      {
+        "timestamp": 1376589720000,
+        "value": 547
+      }
+    ]
+  }
+}'
+
+jsonlite::fromJSON(txt = singleTimeseries)
+# works well
+
+RJSONIO::fromJSON(content = singleTimeseries)
+# does NOT work well
+
+jsonlite::fromJSON(txt = multipleTimeseries)
+# works well
+
+RJSONIO::fromJSON(content = multipleTimeseries)
+# weird
+
+# not working yet!
+test_series <- jsonlite::fromJSON(txt = singleTimeseries)
+parse_date_time(x = test_series$values$timestamp, orders = "OS")
+
+as.POSIXct(test_series$values$timestamp/1000, origin = "1970-01-01")
+
+```
+
+```{r categories}
+
+categoryCollection <- '[
+  {
+    "id": "cat_h7234u",
+    "label": "Water"
+  },
+  {
+    "id": "cat_eddfnq",
+    "label": "Air"
+  }
+]'
+
+categoryItem <- '{
+  "id": "cat_eddfnq",
+  "label": "Air",
+  "service": {
+    "id": "../services/srv_823sd",
+    "label": "PEGELONLINE"
+  }
+}'
+
+cc <- jsonlite::fromJSON(txt = categoryCollection)
+cc
+
+# array to named list
+ccList <- as.list(cc$id)
+names(ccList) <- cc$label
+ccList
+
+jsonlite::fromJSON(txt = categoryItem)
+```
+
+
+# Options
+
+## Logging
+
+`sensorweb4R` uses the package [futile.logger](http://cran.r-project.org/package=futile.logger) for logging and by default prints log statements only to the console. The default logging level is `INFO` can can be changed with `flog.threshold(<level>, name = "sensorweb4R")` to one of `TRACE` (most detailed), `DEBUG`, `INFO`, `WARN`, `ERROR`, `FATAL` (least verbose).
+
+You can configure the level of the logger and log files and much more - just check the logging package documentation with `?futile.logger`.
+
+# Source Code
+
+`sensorweb4R` is open source software managed within the [52°North Sensor Web Community](http://52north.org/communities/sensorweb/). The code is available on GitHub: [https://github.com/52North/sensorweb4R](https://github.com/52North/sensorweb4R)
+
+## Contribute
+
+Please check the [README.md](https://github.com/52North/sensorweb4R/blob/master/README.md) on GitHub for developer documentation.
+
+# Support / Contact
+
+Please direct support questions to the 52°North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).
+
+Add an [issue/comment on GitHub](https://github.com/52North/sensorweb4R/issues) if you found a bug or want to collaborate on new features.
+
+<!--# Acknowledgements
+This work was supported by ..
+-->
+
+# License
+
+![](https://i.creativecommons.org/l/by/4.0/88x31.png "CC BY 4.0 Logo")
+    
+This document is licensed a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).
+
+This R extension package ``sensorweb4R`` is licensed under [GPL version 2](https://tldrlegal.com/license/gnu-general-public-license-v2).
+
+<!--
+> "He who gives up [code] safety for [code] speed deserves neither."
+%([via](https://twitter.com/hadleywickham/status/504368538874703872))
+-->
+
+[1] http://en.wikipedia.org/wiki/Sensor_web
+
