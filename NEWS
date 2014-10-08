@@ -1,3 +1,4 @@
 Changes in sensorweb4R Version 0.x
 
   o NEW package: download metadata and data from 52North Timeseries API
+  o test package with Travis
