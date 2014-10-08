@@ -32,6 +32,8 @@ Currently, the following web service APIs are supported:
 * [52North Timeseries API](https://wiki.52north.org/bin/view/SensorWeb/SensorWebClientRESTInterface)
     
     The Timeseries API is a web service interface to publish and explore time series data in a way that is tailored to thin web clients, e.g. JavaScript. It uses a [RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer) approach and returns data encoded in [JSON](http://json.org/).
+    
+    It supports different kinds of storage backends such as direct database access or being a proxy for OGC SOS.
 
 A related package is `sos4R` ([on CRAN](http://cran.r-project.org/web/packages/sos4R)), which provides similar functionality to download timeseries from a standardized OGC Sensor Observation Service.
 
@@ -78,22 +80,23 @@ http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api-doc/index.ht
 ## Exploring Available Timeseries
 
 Tasks a user should be able to do:
-* index file
+
 * querying / searching with keywords, ..
-* exploring stations
-* timeseries metadata
+* exploring stations/timeseries (these are the main concepts of the API)
+* downloading timeseries data and metadata
 
 Notes for development:
-* Goal: mirror the structure of objects of the API to support
+
+* Goal: mirror the structure of objects of the API
 * classes for objects defined by the API, supporting both "id/label" and "extended" versions
-  * `Timeseries`
-  * `Station`
-  * `Service`
-  * `Category`
-  * `Phenomenon`
-  * `SearchResult`
-  * `Collection`
-  * Super-class: TimeseriesAPIObject, which has a 'version' slot
+    * `Timeseries`
+    * `Station`
+    * `Service`
+    * `Category`
+    * `Phenomenon`
+    * `SearchResult`
+    * `Collection`
+    * Super-class: TimeseriesAPIObject, which has a 'version' slot
 * Paging: was planned at some point and is partially specified (only the headers) but is not implemented
 * geometries use GeoJSON, check if there is a package with parsing functions for the geometries used in Timeseries API (leafletR has only ..toGeoJSON functions)
 
@@ -104,8 +107,6 @@ Using **S4 classes**:
 ```{r, eval = FALSE}
 endpoint <- SensorwebEndpoint(url = "http://sensorweb.server.org/api/v1")
 
-
-# S4
 sw_search(endpoint, q = "search term")
 # a list of matching objects of all types
 
@@ -161,8 +162,6 @@ getData(t, ..., timespan = minutes(x = 60))
 
 # query rendedred timeseries with style and other rendeing options - minimal support only!
 getData(t, ..., renderingOptions = list(style = '{ "chartType": "line", ...}', legend = TRUE, generalize = TRUE, format = .., ))
-
-
 
 
 services(endpoint)
@@ -264,10 +263,14 @@ pander::pandoc.table(iris[1:3, 1:4])
 
 Testing of parsing with `jsonlite`:
 
-```{r timesries}
+
+```{r, message=FALSE}
 require(jsonlite)
 require(RJSONIO)
+require(lubridate)
+```
 
+```{r timesries}
 singleTimeseries <- '{
   "values": [
     {
@@ -320,28 +323,28 @@ multipleTimeseries <- '{
   }
 }'
 
+# works well:
 jsonlite::fromJSON(txt = singleTimeseries)
-# works well
 
+# does NOT work well:
 RJSONIO::fromJSON(content = singleTimeseries)
-# does NOT work well
 
+# works well:
 jsonlite::fromJSON(txt = multipleTimeseries)
-# works well
 
+# weird:
 RJSONIO::fromJSON(content = multipleTimeseries)
-# weird
+```
 
+```{r, timestuff}
 # not working yet!
 test_series <- jsonlite::fromJSON(txt = singleTimeseries)
 parse_date_time(x = test_series$values$timestamp, orders = "OS")
 
 as.POSIXct(test_series$values$timestamp/1000, origin = "1970-01-01")
-
 ```
 
 ```{r categories}
-
 categoryCollection <- '[
   {
     "id": "cat_h7234u",
@@ -384,7 +387,7 @@ You can configure the level of the logger and log files and much more - just che
 
 # Source Code
 
-`sensorweb4R` is open source software managed within the [52°North Sensor Web Community](http://52north.org/communities/sensorweb/). The code is available on GitHub: [https://github.com/52North/sensorweb4R](https://github.com/52North/sensorweb4R)
+`sensorweb4R` is open source software managed within the [52North Sensor Web Community](http://52north.org/communities/sensorweb/). The code is available on GitHub: [https://github.com/52North/sensorweb4R](https://github.com/52North/sensorweb4R)
 
 ## Contribute
 
@@ -392,13 +395,13 @@ Please check the [README.md](https://github.com/52North/sensorweb4R/blob/master/
 
 # Support / Contact
 
-Please direct support questions to the 52°North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).
+Please direct support questions to the 52North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).
 
 Add an [issue/comment on GitHub](https://github.com/52North/sensorweb4R/issues) if you found a bug or want to collaborate on new features.
 
-<!--# Acknowledgements
+# Acknowledgements
+
 This work was supported by ..
--->
 
 # License
 
