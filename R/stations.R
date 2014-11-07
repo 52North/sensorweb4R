@@ -56,7 +56,7 @@
 }
 
 .get_json <- function(url, ...) {
-    futile.logger::flog.debug("Requesting %s", .url)
+    futile.logger::flog.debug("Requesting %s", url)
     response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
     httr::stop_for_status(response)
     content <- httr::content(response, "text")
