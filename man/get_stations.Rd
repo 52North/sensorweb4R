@@ -7,13 +7,19 @@ get_stations(endpoint, service = NULL, category = NULL, phenomenon = NULL,
   crs = NULL, bbox = NULL, near = NULL)
 }
 \arguments{
+\item{endpoint}{the base URL of the Timeseries API}
+
 \item{service}{only return resources where the service id does match}
 
 \item{category}{only return resources where the category id does match}
 
 \item{phenomenon}{only return resources where the phenomenon id does match}
 
-\item{url}{the base URL of the Timeseries API}
+\item{crs}{the CRS to retrieve}
+
+\item{bbox}{the BBox to retrieve}
+
+\item{near}{the \code{near} filter}
 }
 \value{
 a \code{sp::SpatialPointsDataFrame} containing matched stations

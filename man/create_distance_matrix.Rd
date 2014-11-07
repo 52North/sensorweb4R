@@ -17,9 +17,7 @@ a \code{sp::SpatialPointsDataFrame}}
 
 \item{dm}{the distance matrix}
 
-\item{the}{file name}
-
-\item{x}{the distance matrix}
+\item{file}{the file name}
 
 \item{the}{file name}
 }
@@ -29,9 +27,9 @@ the distance matrix of class \code{dist}
 \description{
 Creates a distance matrix for the supplied coordinates.
 
-Reads a distance matrix from disk.
+Saves a distance matrix to disk.
 
-Saves the a distance matrix to disk.
+Reads the a distance matrix from disk.
 }
 \section{Functions}{
 \itemize{

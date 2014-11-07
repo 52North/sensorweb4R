@@ -69,10 +69,13 @@
 #' Requests station data from the Timeseries API using
 #' the supplied filters.
 #'
-#' @param url the base URL of the Timeseries API
+#' @param endpoint the base URL of the Timeseries API
 #' @param service only return resources where the service id does match
 #' @param category only return resources where the category id does match
 #' @param phenomenon only return resources where the phenomenon id does match
+#' @param crs the CRS to retrieve
+#' @param bbox the BBox to retrieve
+#' @param near the \code{near} filter
 #' @export
 #' @return a \code{sp::SpatialPointsDataFrame} containing matched stations
 #' @examples

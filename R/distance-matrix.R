@@ -32,7 +32,6 @@
 #' @param x a Nx2 matrix of WGS84 coordinates or
 #'        a \code{sp::SpatialPointsDataFrame}
 #' @return the distance matrix of class \code{dist}
-#'
 #' @export
 #' @examples
 #' \dontrun{
@@ -52,7 +51,7 @@ create_distance_matrix <- function(x) {
 
 #' Distance Matrix Deserialization
 #'
-#' Reads a distance matrix from disk.
+#' Saves a distance matrix to disk.
 #'
 #' @param dm the distance matrix
 #' @param the file name
@@ -68,10 +67,9 @@ save_distance_matrix <- function(dm, file) {
 
 #' Distance Matrix Serialization
 #'
-#' Saves the a distance matrix to disk.
+#' Reads the a distance matrix from disk.
 #'
-#' @param x the distance matrix
-#' @param the file name
+#' @param file the file name
 #' @export
 #' @examples
 #' \dontrun{
