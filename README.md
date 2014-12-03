@@ -52,6 +52,6 @@ Add an issue/comment on GitHub if you found a bug or want to collaborate on new 
 
 ## License
 
-This R extension package is licensed under [GPL version 2](https://tldrlegal.com/license/gnu-general-public-license-v2).
+This R extension package is licensed under [Apache License 2.0](https://www.tldrlegal.com/l/apache2).
 
 Documentation (namely the vignettes) are published under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/).

@@ -7,7 +7,7 @@ Authors@R: c( person("Daniel", "Nuest", email = "d.nuest@52north.org", role =
 Description: An R client for the 52\u00b0North Sensor Web Client API
 Depends:
     R (>= 3.1.1)
-License: GPL-2
+License: Apache License (== 2.0)
 LazyData: true
 URL: https://github.com/52North/sensorweb4R
 BugReports: https://github.com/52North/sensorweb4R/issues
