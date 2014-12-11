@@ -30,9 +30,9 @@ The `R` extension package `sensorweb4R` provides functions and classes to downlo
 Currently, the following web service APIs are supported:
 
 * [52North Timeseries API](https://wiki.52north.org/bin/view/SensorWeb/SensorWebClientRESTInterface)
-    
+
     The Timeseries API is a web service interface to publish and explore time series data in a way that is tailored to thin web clients, e.g. JavaScript. It uses a [RESTful](http://en.wikipedia.org/wiki/Representational_state_transfer) approach and returns data encoded in [JSON](http://json.org/).
-    
+
     It supports different kinds of storage backends such as direct database access or being a proxy for OGC SOS.
 
 A related package is `sos4R` ([on CRAN](http://cran.r-project.org/web/packages/sos4R)), which provides similar functionality to download timeseries from a standardized OGC Sensor Observation Service.
@@ -339,7 +339,7 @@ RJSONIO::fromJSON(content = multipleTimeseries)
 ```{r, timestuff}
 # not working yet!
 test_series <- jsonlite::fromJSON(txt = singleTimeseries)
-parse_date_time(x = test_series$values$timestamp, orders = "OS")
+lubridate::parse_date_time(x = test_series$values$timestamp, orders = "OS")
 
 as.POSIXct(test_series$values$timestamp/1000, origin = "1970-01-01")
 ```
@@ -406,7 +406,7 @@ This work was supported by ..
 # License
 
 ![](https://i.creativecommons.org/l/by/4.0/88x31.png "CC BY 4.0 Logo")
-    
+
 This document is licensed a [Creative Commons Attribution 4.0 International License](http://creativecommons.org/licenses/by/4.0/) (CC BY 4.0).
 
 This R extension package ``sensorweb4R`` is licensed under [GPL version 2](https://tldrlegal.com/license/gnu-general-public-license-v2).
