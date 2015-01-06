@@ -7,7 +7,7 @@ Authors@R: c( person("Daniel", "Nuest", email = "d.nuest@52north.org", role =
 Description: An R client for the 52\u00b0North Sensor Web Client API
 Depends:
     R (>= 3.1.1)
-License: Apache License (== 2.0)
+License: Apache License (== 2.0) | file LICENSE
 LazyData: true
 URL: https://github.com/52North/sensorweb4R
 BugReports: https://github.com/52North/sensorweb4R/issues
@@ -21,3 +21,28 @@ Suggests:
     pander,
     lubridate
 VignetteBuilder: knitr
+Collate:
+    'api-endpoints.R'
+    'api-index.R'
+    'cache-class.R'
+    'generic-methods.R'
+    'httpresource-class.R'
+    'endpoint-class.R'
+    'resource-class.R'
+    'service-class.R'
+    'category-class.R'
+    'distance-matrix.R'
+    'domainresource-class.R'
+    'station-class.R'
+    'parse-methods.R'
+    'endpoint-methods.R'
+    'feature-class.R'
+    'offering-class.R'
+    'phenomenon-class.R'
+    'procedure-class.R'
+    'resource-methods.R'
+    'station-methods.R'
+    'stations.R'
+    'timeseries-class.R'
+    'utils.R'
+    'zzz.R'
