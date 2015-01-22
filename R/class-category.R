@@ -29,10 +29,13 @@ setClassUnion("Category_or_NULL",
               c("Category", "NULL"))
 
 #' @export
-Category <- function(id,
-                     label = rep(as.character(NA), length(id)),
-                     endpoint = rep(Endpoint(as.character(NA)), length(id)),
-                     service =  rep(Service(as.character(NA)), length(id))) {
+Category <- function(id = character(), label = NULL,
+                     endpoint = NULL, service = NULL) {
+    id <- as.character(id)
+    len <- length(id)
+    label <- stretch(len, label, as.character(NA), as.character)
+    endpoint <- stretch(len, endpoint, as.character(NA), as.Endpoint)
+    service <- stretch(len, service, as.character(NA), as.Service)
     return(new("Category", id = id, endpoint = endpoint,
                label = label, service = service))
 }
@@ -40,6 +43,14 @@ Category <- function(id,
 setMethod("service",
           signature(x = "Category"),
           function(x) x@service)
+
+setMethod("service<-",
+          signature(x = "Category",
+                    value = "Service_or_NULL"),
+          function(x, value) {
+              x@service <- stretch(length(x), value, as.character(NA), as.Service)
+              invisible(x)
+          })
 
 setAs("character", "Category", function(from) Category(id = from))
 
@@ -52,12 +63,18 @@ rbind2.Category <- function(x, y) {
              label = c(label(x), label(y)),
              service = concat(service(x), service(y)))
 }
-setMethod("rbind2", signature("Category", "Category"), function(x, y) concat.pair.Category(x, y))
-setMethod("rbind2", signature("Category", "ANY"), function(x, y) concat.pair.Category(x, as.Category(y)))
-setMethod("rbind2", signature("ANY", "Category"), function(x, y) concat.pair.Category(as.Category(x), y))
-setMethod("rbind2", signature("ANY", "ANY"), function(x, y) concat.pair.Category(as.Category(x), as.Category(y)))
-setMethod("rep", signature(x = "Category"), function(x, ...)
-    Category(endpoint = rep(endpoint(x), ...),
-             id = rep(id(x), ...),
-             label = rep(label(x), ...),
-             service = rep(service(x), ...)))
+setMethod("rbind2", signature("Category", "Category"),
+          function(x, y) concat.pair.Category(x, y))
+setMethod("rbind2", signature("Category", "ANY"),
+          function(x, y) concat.pair.Category(x, as.Category(y)))
+setMethod("rbind2", signature("ANY", "Category"),
+          function(x, y) concat.pair.Category(as.Category(x), y))
+setMethod("rbind2", signature("ANY", "ANY"),
+          function(x, y) concat.pair.Category(as.Category(x),
+                                              as.Category(y)))
+setMethod("rep", signature(x = "Category"),
+          function(x, ...)
+              Category(endpoint = rep(endpoint(x), ...),
+                       id = rep(id(x), ...),
+                       label = rep(label(x), ...),
+                       service = rep(service(x), ...)))

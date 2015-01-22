@@ -2,6 +2,7 @@
 #' @include helper-methods.R
 #' @include virtual-class-http-resource.R
 #' @include class-endpoint.R
+#' @include class-unions.R
 NULL
 
 
@@ -21,11 +22,34 @@ setClass("ApiResource",
 
 #' @export
 is.ApiResource <- function(x) is(x, "ApiResource")
+
 #' @export
 as.ApiResource <- function(x) as(x, "ApiResource")
 
 #' @export
 length.ApiResource <- function(x) length(id(x))
+
+setMethod("length",
+          signature(x = "ApiResource"),
+          length.ApiResource)
+
+#' @export
+as.list.ApiResource <- function(x, ...)
+    lapply(seq_len(length(x)), function(i) x[i])
+
+setMethod("as.list",
+          signature(x = "ApiResource"),
+          as.list.ApiResource)
+
+#' @export
+unique.ApiResource <- function(x, ...) {
+    x[sapply(id(x), function(id) which.max(id(x) == id))]
+}
+
+setMethod("unique",
+          signature(x = "ApiResource"),
+          unique.ApiResource)
+
 
 setMethod("id",
           signature(x = "ApiResource"),
@@ -37,10 +61,9 @@ setMethod("label",
 
 setMethod("label<-",
           signature(x = "ApiResource",
-                    value = "character"),
+                    value = "character_or_NULL"),
           function(x, value) {
-              check_length(x, value)
-              x@label <- value
+              x@label <- stretch(length(x), value, as.character(NA), as.character)
               invisible(x)
           })
 
@@ -50,9 +73,9 @@ setMethod("endpoint",
 
 setMethod("endpoint<-",
           signature(x = "ApiResource",
-                    value = "Endpoint"),
+                    value = "Endpoint_or_NULL"),
           function(x, value) {
-              x@endpoint <- value
+              x@endpoint <- stretch(length(x), value, as.character(NA), as.Endpoint)
               invisible(x)
           })
 
@@ -65,16 +88,9 @@ setMethod("resourceURL",
                     sep = "/")
           })
 
-setMethod("length",
-          signature(x = "ApiResource"),
-          length.ApiResource)
 
-#' @export
-unique.ApiResource <- function(x, ...) {
-    x[sapply(id(x), function(id) which.max(id(x) == id))]
-}
 
-setMethod("unique",
-          signature(x = "ApiResource"),
-          unique.ApiResource)
+
+
+
 

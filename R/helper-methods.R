@@ -6,19 +6,35 @@
     return(x)
 }
 
+stretch <- function(len, x, default, as.fun) {
+    if (is.null(x))
+        x <- default
+    if (length(x) == 1)
+        x <- rep(x, len)
+    if (length(x) != len)
+        x <- rep(x, length.out = len)
+    as.fun(x)
+}
+
+rep.data.frame <- function(x, ...) {
+    y <- as.data.frame(lapply(x, rep, ...))
+    names(y) <- names(x)
+    y
+}
+
 
 assert.same.length <- function(...) {
-    return(TRUE)
     len <- function(x)
-        if (is.data.frame(x) || is.matrix(x)) dim(x)[1] else length(x)
+        if (is.data.frame(x) || is.matrix(x))
+            dim(x)[1] else length(x)
 
     l <- list(...)
-    if (length(l) == 0) return(character())
+    if (len(l) == 0) return(character())
     ref.length <- len(l[[1]])
     ref.name <- names(l)[1]
 
     errors <- mapply(function(key, value) {
-        if (ref.length != len(value)) {
+        if (!is.null(value) && ref.length != len(value)) {
             paste0("length(", ref.name, ") = ", ref.length,
                    " != length(", key, ") = ", len(value))
         } else {
@@ -79,9 +95,9 @@ subset_or_null <- function(x, getter, i) {
 
 
 #' @export
-.simplify.list <- function(x, element) {
-    if (!missing(element)) {
-        x <- lapply(x, "[[", element)
+.simplify.list <- function(x, path) {
+    if (!missing(path)) {
+        x <- lapply(x, "[[", path)
     }
     do.call(mapply, c(list(FUN=c, SIMPLIFY=FALSE), x))
 }

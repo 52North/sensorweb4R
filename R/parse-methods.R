@@ -8,6 +8,7 @@ SpatialPoints.parse <- function(json) {
 }
 
 Station.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Station(endpoint=endpoint))
     id <- as.character(json$properties$id)
     label <- as.character(json$properties$label)
     geometry <- SpatialPoints.parse(json$geometry)
@@ -16,6 +17,7 @@ Station.parse <- function(endpoint, json) {
 }
 
 Service.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Service(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     serviceURL <- as.character(json$serviceUrl)
@@ -30,6 +32,7 @@ Service.parse <- function(endpoint, json) {
 }
 
 ReferenceValue.parse <- function(endpoint, json) {
+    if (is.null(json)) return(ReferenceValue(endpoint=endpoint))
     lapply(json, function(x) {
         id <- as.character(x$referenceValueId)
         label <- as.character(x$label)
@@ -47,6 +50,7 @@ ReferenceValue.parse <- function(endpoint, json) {
 }
 
 Timeseries.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Timeseries(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     uom <- as.character(json$uom)
@@ -66,6 +70,7 @@ Timeseries.parse <- function(endpoint, json) {
 }
 
 TimeseriesData.parse <- function(json) {
+    if (is.null(json)) return(TVP())
     value <- as.numeric(json$values$value)
     time <- json$values$timestamp
     time <- as.POSIXct(time/1000, tz = "GMT",
@@ -74,6 +79,7 @@ TimeseriesData.parse <- function(json) {
 }
 
 Phenomenon.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Phenomenon(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     domainId <- as.character(json$domainId)
@@ -82,6 +88,7 @@ Phenomenon.parse <- function(endpoint, json) {
 }
 
 Feature.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Feature(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     domainId <- as.character(json$domainId)
@@ -90,6 +97,7 @@ Feature.parse <- function(endpoint, json) {
 }
 
 Category.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Category(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     service <- Service.parse(endpoint, json$service)
@@ -97,6 +105,7 @@ Category.parse <- function(endpoint, json) {
 }
 
 Offering.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Offering(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     domainId <- as.character(json$domainId)
@@ -105,6 +114,7 @@ Offering.parse <- function(endpoint, json) {
 }
 
 Procedure.parse <- function(endpoint, json) {
+    if (is.null(json)) return(Procedure(endpoint=endpoint))
     id <- as.character(json$id)
     label <- as.character(json$label)
     domainId <- as.character(json$domainId)

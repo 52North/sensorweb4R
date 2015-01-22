@@ -16,7 +16,7 @@
 NULL
 
 #' @export
-as.character.ApiResource <- function(x, ...) id(x)
+as.character.ApiResource <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("ApiResource", "character", function(from) as.character.ApiResource(from))
 setMethod("as.character", signature("ApiResource"), as.character.ApiResource)
 
@@ -30,7 +30,7 @@ toString.ApiResource <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("ApiResource"), toString.ApiResource)
 
 #' @export
-as.character.Category <- function(x, ...) id(x)
+as.character.Category <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Category", "character", function(from) as.character.Category(from))
 setMethod("as.character", signature("Category"), as.character.Category)
 
@@ -44,7 +44,7 @@ toString.Category <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Category"), toString.Category)
 
 #' @export
-as.character.DomainResource <- function(x, ...) id(x)
+as.character.DomainResource <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("DomainResource", "character", function(from) as.character.DomainResource(from))
 setMethod("as.character", signature("DomainResource"), as.character.DomainResource)
 
@@ -72,7 +72,7 @@ toString.Endpoint <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Endpoint"), toString.Endpoint)
 
 #' @export
-as.character.Feature <- function(x, ...) id(x)
+as.character.Feature <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Feature", "character", function(from) as.character.Feature(from))
 setMethod("as.character", signature("Feature"), as.character.Feature)
 
@@ -100,7 +100,7 @@ toString.HttpResource <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("HttpResource"), toString.HttpResource)
 
 #' @export
-as.character.Offering <- function(x, ...) id(x)
+as.character.Offering <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Offering", "character", function(from) as.character.Offering(from))
 setMethod("as.character", signature("Offering"), as.character.Offering)
 
@@ -114,7 +114,7 @@ toString.Offering <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Offering"), toString.Offering)
 
 #' @export
-as.character.Phenomenon <- function(x, ...) id(x)
+as.character.Phenomenon <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Phenomenon", "character", function(from) as.character.Phenomenon(from))
 setMethod("as.character", signature("Phenomenon"), as.character.Phenomenon)
 
@@ -128,7 +128,7 @@ toString.Phenomenon <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Phenomenon"), toString.Phenomenon)
 
 #' @export
-as.character.Procedure <- function(x, ...) id(x)
+as.character.Procedure <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Procedure", "character", function(from) as.character.Procedure(from))
 setMethod("as.character", signature("Procedure"), as.character.Procedure)
 
@@ -142,7 +142,7 @@ toString.Procedure <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Procedure"), toString.Procedure)
 
 #' @export
-as.character.ReferenceValue <- function(x, ...) id(x)
+as.character.ReferenceValue <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("ReferenceValue", "character", function(from) as.character.ReferenceValue(from))
 setMethod("as.character", signature("ReferenceValue"), as.character.ReferenceValue)
 
@@ -156,7 +156,7 @@ toString.ReferenceValue <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("ReferenceValue"), toString.ReferenceValue)
 
 #' @export
-as.character.Service <- function(x, ...) id(x)
+as.character.Service <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Service", "character", function(from) as.character.Service(from))
 setMethod("as.character", signature("Service"), as.character.Service)
 
@@ -170,7 +170,7 @@ toString.Service <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Service"), toString.Service)
 
 #' @export
-as.character.Station <- function(x, ...) id(x)
+as.character.Station <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Station", "character", function(from) as.character.Station(from))
 setMethod("as.character", signature("Station"), as.character.Station)
 
@@ -183,8 +183,10 @@ setMethod("show", signature("Station"), function(object) print.Station(object))
 toString.Station <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Station"), toString.Station)
 
-#' @export
-as.character.StatusInterval <- function(x, ...) paste0(id(x), "[", lower(x), ", ", upper(x), "]")
+as.character.StatusInterval <- function(x, ...) {
+    if (length(x) == 0) paste0(class(x),"()")
+    else paste0(name(x), "[", lower(x), ", ", upper(x), "]: ", color(x))
+}
 setAs("StatusInterval", "character", function(from) as.character.StatusInterval(from))
 setMethod("as.character", signature("StatusInterval"), as.character.StatusInterval)
 
@@ -198,7 +200,7 @@ toString.StatusInterval <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("StatusInterval"), toString.StatusInterval)
 
 #' @export
-as.character.Timeseries <- function(x, ...) id(x)
+as.character.Timeseries <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("Timeseries", "character", function(from) as.character.Timeseries(from))
 setMethod("as.character", signature("Timeseries"), as.character.Timeseries)
 
@@ -212,7 +214,7 @@ toString.Timeseries <- function(x, ...) noquote(as.character(x))
 setMethod("toString", signature("Timeseries"), toString.Timeseries)
 
 #' @export
-as.character.TVP <- function(x, ...) paste0(time(x), ": ", value(x))
+as.character.TVP <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else paste0(time(x), ": ", value(x))
 setAs("TVP", "character", function(from) as.character.TVP(from))
 setMethod("as.character", signature("TVP"), as.character.TVP)
 

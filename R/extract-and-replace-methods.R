@@ -15,10 +15,10 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Category(endpoint = endpoint(x),
-                           id = subset_or_null(x, id, i),
-                           label = subset_or_null(x, label, i),
-                           service = subset_or_null(x, service, i))
+                  Category(endpoint = endpoint(x)[i],
+                           id = id(x)[i],
+                           label = label(x)[i],
+                           service = service(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -43,11 +43,11 @@ setMethod("[",
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
                   new(class(x),
-                      endpoint = endpoint(x),
-                      id = subset_or_null(x, id, i),
-                      label = subset_or_null(x, label, i),
-                      service = subset_or_null(x, service, i),
-                      domainId = subset_or_null(x, domainId, i))
+                      endpoint = endpoint(x)[i],
+                      id = id(x)[i],
+                      label = label(x)[i],
+                      service = service(x)[i],
+                      domainId = domainId(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -71,7 +71,7 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  stop("TODO implement Endpoint[i]")
+                  Endpoint(url = resourceURL(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -96,11 +96,11 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  ReferenceValue(endpoint = endpoint(x),
-                                 id = subset_or_null(x, id, i),
-                                 label = subset_or_null(x, label, i),
-                                 time = subset_or_null(x, time, i),
-                                 value = subset_or_null(x, value, i))
+                  ReferenceValue(endpoint = endpoint(x)[i],
+                                 id = id(x)[i],
+                                 label = label(x)[i],
+                                 time = time(x)[i],
+                                 value = value(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -125,14 +125,14 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Service(endpoint = endpoint(x),
-                          id = subset_or_null(x, id, i),
-                          label = subset_or_null(x, label, i),
-                          serviceURL = subset_or_null(x, serviceURL, i),
-                          version = subset_or_null(x, version, i),
-                          type = subset_or_null(x, type, i),
-                          supportsFirstLatest = subset_or_null(x, supportsFirstLatest, i),
-                          quantities = quantities(x)[i,]);
+                  Service(endpoint = endpoint(x)[i],
+                          id = id(x)[i],
+                          label = label(x)[i],
+                          serviceURL = serviceURL(x)[i],
+                          version = version(x)[i],
+                          type = type(x)[i],
+                          supportsFirstLatest = supportsFirstLatest(x)[i],
+                          quantities = quantities(x)[i,])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -157,10 +157,10 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Station(endpoint = endpoint(x),
-                          id = subset_or_null(x, id, i),
-                          label = subset_or_null(x, label, i),
-                          geometry = subset_or_null(x, sp::geometry, i))
+                  Station(endpoint = endpoint(x)[i],
+                          id = id(x)[i],
+                          label = label(x)[i],
+                          geometry = geometry(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -210,20 +210,20 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Timeseries(endpoint = endpoint(x),
-                             id = subset_or_null(x, id, i),
-                             label = subset_or_null(x, label, i),
-                             uom = subset_or_null(x, uom, i),
-                             phenomenon = subset_or_null(x, phenomenon, i),
-                             service = subset_or_null(x, service, i),
-                             feature = subset_or_null(x, feature, i),
-                             offering = subset_or_null(x, offering, i),
-                             procedure = subset_or_null(x, procedure, i),
-                             category = subset_or_null(x, category, i),
-                             station = subset_or_null(x, station, i),
-                             statusIntervals = subset_or_null(x, statusIntervals, i),
-                             firstValue = subset_or_null(x, firstValue, i),
-                             lastValue = subset_or_null(x, lastValue, i))
+                  Timeseries(endpoint = endpoint(x)[i],
+                             id = id(x)[i],
+                             label = label(x)[i],
+                             uom = uom(x)[i],
+                             phenomenon = phenomenon(x)[i],
+                             service = service(x)[i],
+                             feature = feature(x)[i],
+                             offering = offering(x)[i],
+                             procedure = procedure(x)[i],
+                             category = category(x)[i],
+                             station = station(x)[i],
+                             statusIntervals = statusIntervals(x)[i],
+                             firstValue = firstValue(x)[i],
+                             lastValue = lastValue(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -248,8 +248,8 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  TVP(time = subset_or_null(x, time, i),
-                      value = subset_or_null(x, value, i))
+                  TVP(time = time(x)[i],
+                      value = value(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
@@ -267,4 +267,3 @@ setMethod("[<-",
                   x
               }
           })
-

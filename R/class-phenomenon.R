@@ -21,4 +21,5 @@ setClassUnion("Phenomenon_or_NULL",
 Phenomenon <- function(...)
     DomainResource(type = "Phenomenon", ...)
 
-setAs("character", "Phenomenon", function(from) Phenomenon(id = from))
+setAs("character", "Phenomenon",
+      function(from) Phenomenon(id = from))

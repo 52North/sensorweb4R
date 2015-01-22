@@ -26,10 +26,12 @@ setClassUnion("Station_or_NULL",
               c("Station", "NULL"))
 
 #' @export
-Station <- function(id,
-                    label = rep(as.character(NA), length(id)),
-                    geometry = NULL,
-                    endpoint = rep(Endpoint(as.character(NA)), length(id))) {
+Station <- function(id = character(), label = NULL,
+                    geometry = NULL, endpoint = NULL) {
+    id <- as.character(id)
+    len <- length(id)
+    label <- stretch(len, label, NA, as.character)
+    endpoint <- stretch(len, endpoint, as.character(NA), as.Endpoint)
     new("Station",
         endpoint = endpoint,
         id = id,
@@ -44,6 +46,18 @@ setMethod("coordinates",
 setMethod("geometry",
           signature(obj = "Station"),
           function(obj) obj@geometry)
+
+setMethod("geometry<-",
+          signature(x = "Station",
+                    value = "SpatialPoints_or_NULL"),
+          function(x, value) {
+              x@geometry <- value
+              invisible(x)
+          })
+
+setMethod("bbox",
+          signature(obj = "Station"),
+          function(obj) bbox(obj@geometry))
 
 setAs("character", "Station", function(from) Station(id = from))
 
@@ -63,13 +77,18 @@ rbind2.Station <- function(x, y) {
             label = c(label(x), label(y)),
             geometry = c(geometry(x), geometry(y)))
 }
-setMethod("rbind2", signature("Station", "Station"), function(x, y) concat.pair.Station(x, y))
-setMethod("rbind2", signature("Station", "ANY"), function(x, y) concat.pair.Station(x, as.Station(y)))
-setMethod("rbind2", signature("ANY", "Station"), function(x, y) concat.pair.Station(as.Station(x), y))
-setMethod("rbind2", signature("ANY", "ANY"), function(x, y) concat.pair.Station(as.Station(x), as.Station(y)))
+setMethod("rbind2", signature("Station", "Station"),
+          function(x, y) rbind2.Station(x, y))
+setMethod("rbind2", signature("Station", "ANY"),
+          function(x, y) rbind2.Station(x, as.Station(y)))
+setMethod("rbind2", signature("ANY", "Station"),
+          function(x, y) rbind2.Station(as.Station(x), y))
+setMethod("rbind2", signature("ANY", "ANY"),
+          function(x, y) rbind2.Station(as.Station(x),
+                                        as.Station(y)))
 
 setMethod("rep", signature(x = "Station"), function(x, ...)
-    Category(endpoint = rep(endpoint(x), ...),
-             id = rep(id(x), ...),
-             label = rep(label(x), ...),
-             geometry = rep(geometry(x), ...)))
+    Station(endpoint = rep(endpoint(x), ...),
+            id = rep(id(x), ...),
+            label = rep(label(x), ...),
+            geometry = rep(geometry(x), ...)))

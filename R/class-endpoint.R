@@ -17,8 +17,8 @@ as.Endpoint <- function(x) as(x, "Endpoint")
 length.Endpoint <- function(x) length(resourceURL(x))
 
 #' @export
-Endpoint <- function(url, ...)
-    new("Endpoint", url = .normalizeURL(url), ...)
+Endpoint <- function(url = character(), ...)
+    new("Endpoint", url = .normalizeURL(as.character(url)), ...)
 
 setClassUnion("Endpoint_or_characters",
               c("Endpoint", "character"))

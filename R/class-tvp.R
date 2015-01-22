@@ -21,25 +21,16 @@ length.TVP <- function(x) length(time(x))
 setClassUnion("TVP_or_NULL", c("TVP", "NULL"))
 
 #' @export
-TVP <- function(time, value = rep(as.numeric(NA), length(time))) {
-    time <- as.POSIXct(time)
-    value <- as.numeric(value)
+TVP <- function(time = character(), value = numeric()) {
+    len <- max(length(time), length(value))
+    time <- rep(as.POSIXct(as.character(time)), length.out = len)
+    value <- rep(as.numeric(value), length.out = len)
     return(new("TVP", time = time, value = value))
 }
 
-setMethod("value",
-          signature(x = "TVP"),
-          function(x) x@value)
-
-setMethod("time",
-          signature(x = "TVP"),
-          function(x) x@time)
-
-setMethod("length",
-          signature("TVP"),
-          length.TVP)
-
-
+setMethod("value", signature(x = "TVP"), function(x) x@value)
+setMethod("time", signature(x = "TVP"), function(x) x@time)
+setMethod("length", signature("TVP"), length.TVP)
 
 rbind2.TVP <- function(x, y) {
     x <- as.TVP(x)

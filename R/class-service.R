@@ -52,54 +52,68 @@ setMethod("quantities",
 
 setMethod("serviceURL<-",
           signature(x = "Service",
-                    value = "character"),
+                    value = "character_or_NULL"),
           function(x, value) {
-              check_length(x, value);
-              x@serviceURL <- value
+              x@serviceURL <- stretch(length(x), value, as.character(NA), as.character)
               invisible(x)
           })
 
 setMethod("version<-",
           signature(x = "Service",
-                    value = "character"),
+                    value = "character_or_NULL"),
           function(x, value) {
-              check_length(x, value);
-              x@version <- value
+              x@version <- stretch(length(x), value, as.character(NA), as.character)
               invisible(x)
           })
 
 setMethod("type<-",
           signature(x = "Service",
-                    value = "character"),
+                    value = "character_or_NULL"),
           function(x, value) {
-              check_length(x, value);
-              x@type <- value
+              x@type <- stretch(length(x), value, as.character(NA), as.character)
               invisible(x)
           })
 
 setMethod("supportsFirstLatest<-",
           signature(x = "Service",
-                    value = "logical"),
+                    value = "logical_or_NULL"),
           function(x, value) {
-              check_length(x, value);
-              x@supportsFirstLatest <- value
+              x@supportsFirstLatest <- stretch(length(x), value, as.logical(NA), as.logical)
               invisible(x)
           })
 
 setMethod("quantities<-",
           signature(x = "Service",
-                    value = "data.frame"),
+                    value = "data.frame_or_NULL"),
           function(x, value) {
-              if (length(x) != dim(value)[1]) {
-                  stop(paste("incorrect length", length(x), "!=", dim(value)[2]))
-              }
-              x@quantities <- value
+              x@quantities <- create.quantities(length(x), value)
               invisible(x)
           })
 
+default.quantities <- function(size) {
+    values <- as.numeric(rep(NA, size))
+    data.frame(stations = values,
+               procedures = values,
+               timeseries = values,
+               features = values,
+               offerings = values,
+               categories = values,
+               phenomena = values)
+}
+
+create.quantities <- function(len, quantities) {
+    if (len == 0)
+        default.quantities(0)
+    else if (is.null(quantities) ||
+                 dim(quantities)[1] == 0)
+        default.quantities(len)
+    else if (dim(quantities)[1] == 1)
+        rep(quantities, length.out = len)
+    else quantities
+}
 
 #' @export
-Service <- function(id,
+Service <- function(id = character(),
                     label = NULL,
                     serviceURL = NULL,
                     version = NULL,
@@ -108,30 +122,26 @@ Service <- function(id,
                     quantities = NULL,
                     endpoint = NULL) {
 
-    l <- length(id)
-    if (is.null(label)) label <- as.character(NA)
-    if (length(label) == 1) label <- rep(label, l)
-    if (is.null(serviceURL)) serviceURL <- as.character(NA)
-    if (length(serviceURL) == 1) serviceURL <- rep(serviceURL, l)
-    if (is.null(version)) version <- as.character(NA)
-    if (length(version) == 1) version <- rep(version, l)
-    if (is.null(type)) type <- as.character(NA)
-    if (length(type) == 0) type <- rep(type, l)
-    if (is.null(supportsFirstLatest)) supportsFirstLatest <- as.logical(NA)
-    if (length(supportsFirstLatest)) supportsFirstLatest <- rep(supportsFirstLatest, l)
-    if (is.null(quantities)) quantities <- data.frame()
-    if (is.null(endpoint)) endpoint <- Endpoint(as.character(NA))
-    if (length(endpoint) == 1) endpoint <- rep(endpoint, l)
-    if (length(endpoint) == 0) endpoint <- rep(endpoint, l)
-    x <- new("Service",
-             endpoint = endpoint,
-             id = id,
-             label = label,
-             serviceURL = serviceURL,
-             version = version,
-             type = type,
-             supportsFirstLatest = supportsFirstLatest,
-             quantities = quantities)
+    len <- length(id)
+
+    label <- stretch(len, label, as.character(NA), as.character)
+    serviceURL <- stretch(len, serviceURL, as.character(NA), as.character)
+    version <- stretch(len, version, as.character(NA), as.character)
+    type <- stretch(len, type, as.character(NA), as.character)
+    supportsFirstLatest <- stretch(len, supportsFirstLatest, as.logical(NA), as.logical)
+    endpoint <- stretch(len, endpoint, as.character(NA), as.Endpoint)
+
+    quantities <- create.quantities(len, quantities)
+
+    new("Service",
+        endpoint = endpoint,
+        id = id,
+        label = label,
+        serviceURL = serviceURL,
+        version = version,
+        type = type,
+        supportsFirstLatest = supportsFirstLatest,
+        quantities = quantities)
 
 }
 
@@ -149,10 +159,15 @@ rbind2.Service <- function(x, y) {
             supportsFirstLatest = c(supportsFirstLatest(x), supportsFirstLatest(y)),
             quantities = rbind(quantities(x), quantities(y)))
 }
-setMethod("rbind2", signature("Service", "Service"), function(x, y) concat.pair.Service(x, y))
-setMethod("rbind2", signature("Service", "ANY"), function(x, y) concat.pair.Service(x, as.Service(y)))
-setMethod("rbind2", signature("ANY", "Service"), function(x, y) concat.pair.Service(as.Service(x), y))
-setMethod("rbind2", signature("ANY", "ANY"), function(x, y) concat.pair.Service(as.Service(x), as.Service(y)))
+setMethod("rbind2", signature("Service", "Service"),
+          function(x, y) concat.pair.Service(x, y))
+setMethod("rbind2", signature("Service", "ANY"),
+          function(x, y) concat.pair.Service(x, as.Service(y)))
+setMethod("rbind2", signature("ANY", "Service"),
+          function(x, y) concat.pair.Service(as.Service(x), y))
+setMethod("rbind2", signature("ANY", "ANY"),
+          function(x, y) concat.pair.Service(as.Service(x),
+                                             as.Service(y)))
 
 setMethod("rep", signature(x = "Service"), function(x, ...)
     Service(endpoint = rep(endpoint(x), ...),
