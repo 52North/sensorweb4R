@@ -14,6 +14,10 @@ BugReports: https://github.com/52North/sensorweb4R/issues
 Imports:
     futile.logger,
     httr,
+    sp,
+    stringi,
+    jsonlite,
+    memoise
 Suggests:
     testthat,
     knitr,
@@ -24,25 +28,31 @@ VignetteBuilder: knitr
 Collate:
     'api-endpoints.R'
     'api-index.R'
-    'cache-class.R'
+    'cache-functions.R'
     'generic-methods.R'
-    'httpresource-class.R'
-    'endpoint-class.R'
-    'resource-class.R'
-    'service-class.R'
-    'category-class.R'
+    'virtual-class-http-resource.R'
+    'helper-methods.R'
+    'class-endpoint.R'
+    'virtual-class-api-resource.R'
+    'class-unions.R'
+    'class-service.R'
+    'class-category.R'
+    'virtual-class-domain-resource.R'
+    'class-feature.R'
+    'class-offering.R'
+    'class-phenomenon.R'
+    'class-procedure.R'
+    'class-tvp.R'
+    'class-reference-value.R'
+    'class-station.R'
+    'class-status-interval.R'
+    'class-timeseries.R'
+    'data.frame-methods.R'
     'distance-matrix.R'
-    'domainresource-class.R'
-    'station-class.R'
+    'extract-and-replace-methods.R'
     'parse-methods.R'
-    'endpoint-methods.R'
-    'feature-class.R'
-    'offering-class.R'
-    'phenomenon-class.R'
-    'procedure-class.R'
-    'resource-methods.R'
-    'station-methods.R'
+    'query-methods.R'
     'stations.R'
-    'timeseries-class.R'
+    'string-methods.R'
     'utils.R'
     'zzz.R'

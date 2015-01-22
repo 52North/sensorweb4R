@@ -42,15 +42,6 @@
     return(json)
 }
 
-.get_json <- function(url, ...) {
-    futile.logger::flog.debug("Requesting %s", url)
-    response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
-    httr::stop_for_status(response)
-    content <- httr::content(response, "text")
-    json <- jsonlite::fromJSON(content)
-    return(json)
-}
-
 #' Request Stations
 #'
 #' Requests station data from the Timeseries API using

@@ -1,9 +1,9 @@
 
 #' @export
-setGeneric("resourceURL", function(x, ...) standardGeneric("resourceURL"))
+setGeneric("resourceURL", function(x) standardGeneric("resourceURL"))
 
 #' @export
-setGeneric("subresourceURL", function(x, subresource, ...) standardGeneric("subresourceURL"))
+setGeneric("subresourceURL", function(x, ...) standardGeneric("subresourceURL"))
 
 #' @export
 setGeneric("stationsURL", function(x) standardGeneric("stationsURL"))
@@ -30,6 +30,9 @@ setGeneric("proceduresURL", function(x) standardGeneric("proceduresURL"))
 setGeneric("phenomenaURL", function(x) standardGeneric("phenomenaURL"))
 
 #' @export
+setGeneric("getDataURL", function(x) standardGeneric("getDataURL"))
+
+#' @export
 setGeneric("stations", function(x, ...) standardGeneric("stations"))
 
 #' @export
@@ -54,13 +57,129 @@ setGeneric("categories", function(x, ...) standardGeneric("categories"))
 setGeneric("features", function(x, ...) standardGeneric("features"))
 
 #' @export
-setGeneric("id", function(x, ...) standardGeneric("id"))
+setGeneric("id", function(x) standardGeneric("id"))
 
 #' @export
-setGeneric("label", function(x, ...) standardGeneric("label"))
+setGeneric("label", function(x) standardGeneric("label"))
 
 #' @export
-setGeneric("endpoint", function(x, ...) standardGeneric("endpoint"))
+setGeneric("endpoint", function(x) standardGeneric("endpoint"))
 
 #' @export
-setGeneric("as.SpatialPointsDataFrame", function(x, ...) standardGeneric("as.SpatialPointsDataFrame"))
+setGeneric("getData", function(x, ...) standardGeneric("getData"))
+
+#' @export
+setGeneric("serviceURL", function(x) standardGeneric("serviceURL"))
+
+#' @export
+setGeneric("version", function(x) standardGeneric("version"))
+
+#' @export
+setGeneric("type", function(x) standardGeneric("type"))
+
+#' @export
+setGeneric("supportsFirstLatest", function(x) standardGeneric("supportsFirstLatest"))
+
+#' @export
+setGeneric("quantities", function(x) standardGeneric("quantities"))
+
+#' @export
+setGeneric("service", function(x) standardGeneric("service"))
+
+#' @export
+setGeneric("domainId", function(x) standardGeneric("domainId"))
+
+#' @export
+setGeneric("color", function(x) standardGeneric("color"))
+
+#' @export
+setGeneric("upper", function(x) standardGeneric("upper"))
+
+#' @export
+setGeneric("lower", function(x) standardGeneric("lower"))
+
+#' @export
+setGeneric("name", function(x) standardGeneric("name"))
+
+#' @export
+setGeneric("time", function(x) standardGeneric("time"))
+
+#' @export
+setGeneric("value", function(x) standardGeneric("value"))
+
+#' @export
+setGeneric("timeseries", function(x, ...) standardGeneric("timeseries"))
+
+#' @export
+setGeneric("feature", function(x) standardGeneric("feature"))
+
+#' @export
+setGeneric("offering", function(x) standardGeneric("offering"))
+
+#' @export
+setGeneric("procedure", function(x) standardGeneric("procedure"))
+
+#' @export
+setGeneric("station", function(x) standardGeneric("station"))
+
+#' @export
+setGeneric("uom", function(x) standardGeneric("uom"))
+
+#' @export
+setGeneric("firstValue", function(x) standardGeneric("firstValue"))
+
+#' @export
+setGeneric("lastValue", function(x) standardGeneric("lastValue"))
+
+#' @export
+setGeneric("statusIntervals", function(x) standardGeneric("statusIntervals"))
+
+#' @export
+setGeneric("category", function(x) standardGeneric("category"))
+
+#' @export
+setGeneric("phenomenon", function(x) standardGeneric("phenomenon"))
+
+#' @export
+setGeneric("fetch", function(x, ...) standardGeneric("fetch"))
+
+#' @export
+setGeneric("service<-", function(x, value) standardGeneric("service<-"))
+
+#' @export
+setGeneric("domainId<-", function(x, value) standardGeneric("domainId<-"))
+
+#' @export
+setGeneric("label<-", function(x, value) standardGeneric("label<-"))
+#' @export
+setGeneric("cache", function(x) standardGeneric("cache"))
+#' @export
+setGeneric("cache<-", function(x, value) standardGeneric("cache<-"))
+#' @export
+setGeneric("serviceURL<-", function(x, value) standardGeneric("serviceURL<-"))
+#' @export
+setGeneric("version<-", function(x, value) standardGeneric("version<-"))
+#' @export
+setGeneric("supportsFirstLatest<-", function(x, value) standardGeneric("supportsFirstLatest<-"))
+#' @export
+setGeneric("type<-", function(x, value) standardGeneric("type<-"))
+#' @export
+setGeneric("quantities<-", function(x, value) standardGeneric("quantities<-"))
+#' @export
+setGeneric("endpoint<-", function(x, value) standardGeneric("endpoint<-"))
+
+concat <- function(x, ...) {
+    if (nargs() < 3) rbind2(x, ...)
+    else rbind2(x, Recall(...))
+}
+
+
+
+
+
+
+
+
+
+
+
