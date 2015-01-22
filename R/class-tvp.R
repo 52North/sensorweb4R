@@ -22,9 +22,9 @@ setClassUnion("TVP_or_NULL", c("TVP", "NULL"))
 
 #' @export
 TVP <- function(time, value = rep(as.numeric(NA), length(time))) {
-    return(new("TVP",
-               time = time,
-               value = value))
+    time <- as.POSIXct(time)
+    value <- as.numeric(value)
+    return(new("TVP", time = time, value = value))
 }
 
 setMethod("value",

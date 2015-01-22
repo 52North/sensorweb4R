@@ -21,6 +21,12 @@ ReferenceValue <- function(id,
                            endpoint = rep(Endpoint(as.character(NA)), length(id)),
                            time = rep(as.character(NA), length(id)),
                            value = rep(as.numeric(NA), length(id))) {
+    time <- as.POSIXct(time)
+    value <- as.numeric(value)
+    label <- as.character(label)
+    id <- as.character(id)
+    endpoint <- as.Endpoint(endpoint)
+
     new("ReferenceValue", endpoint = endpoint, id = id,
         label = label, time = time, value = value)
 }

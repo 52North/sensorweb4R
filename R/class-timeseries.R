@@ -68,7 +68,8 @@ Timeseries <- function(id,
                        statusIntervals = rep(list(StatusInterval(as.character(NA)), length(id))),
                        firstValue = rep(TVP(as.character(NA)), length(id)),
                        lastValue = rep(TVP(as.character(NA)), length(id)),
-                       referenceValues = rep(ReferenceValue(as.character(NA)), length(id))) {
+                       referenceValues = list(rep(ReferenceValue(as.character(NA)), length(id)))) {
+
     return(new("Timeseries",
                endpoint = endpoint,
                id = id,
