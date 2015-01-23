@@ -24,7 +24,8 @@ Suggests:
     pander,
     lubridate,
     xts,
-    zoo
+    zoo,
+    openair
 VignetteBuilder: knitr
 Collate:
     'api-endpoints.R'
