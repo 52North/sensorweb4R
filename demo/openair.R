@@ -32,11 +32,13 @@ pollutant.pm10 <- data[[3]]
 
 # strangly we do not have any wind data,
 # so fill in some fake values
-wind.speed <- TVP(time(pollution), runif(length(pollution), 0, 100))
-wind.direction <- TVP(time(pollution), runif(length(pollution), 0, 360))
+wind.speed <- TVP(time(pollutant.pm10),
+                  runif(length(pollutant.pm10), 0, 100))
+wind.direction <- TVP(time(pollutant.pm10),
+                      runif(length(pollutant.pm10), 0, 360))
 
 # create a data.frame for openair
-df <- data.frame(time = time(pollution),
+df <- data.frame(time = time(pollutant.pm10),
                  pm10 = value(pollutant.pm10),
                  ws = value(wind.speed),
                  wd = value(wind.direction))
