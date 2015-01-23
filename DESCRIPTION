@@ -22,7 +22,9 @@ Suggests:
     knitr,
     devtools,
     pander,
-    lubridate
+    lubridate,
+    xts,
+    zoo
 VignetteBuilder: knitr
 Collate:
     'api-endpoints.R'
@@ -48,11 +50,11 @@ Collate:
     'class-timeseries.R'
     'data.frame-methods.R'
     'distance-matrix.R'
-    'extensions-sp.R'
     'extract-and-replace-methods.R'
     'parse-methods.R'
     'query-methods.R'
     'stations.R'
     'string-methods.R'
+    'timeseries-coercion.R'
     'utils.R'
     'zzz.R'

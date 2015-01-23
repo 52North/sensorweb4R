@@ -5,6 +5,7 @@
 NULL
 
 #' @export
+#' @import sp
 setClass("Station",
          contains = "ApiResource",
          slots = list(geometry = "SpatialPoints_or_NULL"),
@@ -39,10 +40,6 @@ Station <- function(id = character(), label = NULL,
         geometry = geometry)
 }
 
-setMethod("coordinates",
-          signature(obj = "Station"),
-          function(obj, ...) coordinates(obj@geometry))
-
 setMethod("geometry",
           signature(obj = "Station"),
           function(obj) obj@geometry)
@@ -55,19 +52,7 @@ setMethod("geometry<-",
               invisible(x)
           })
 
-setMethod("bbox",
-          signature(obj = "Station"),
-          function(obj) bbox(obj@geometry))
-
 setAs("character", "Station", function(from) Station(id = from))
-
-#' @export
-as.SpatialPointsDataFrame <- function(x) as(x, "SpatialPointsDataFrame")
-setAs("Station", "SpatialPointsDataFrame",
-      function(from)
-          SpatialPointsDataFrame(coords = geometry(x),
-                                 data = data.frame(id = id(x),
-                                                   label = label(x))))
 
 rbind2.Station <- function(x, y) {
     x <- as.Station(x)
@@ -92,3 +77,35 @@ setMethod("rep", signature(x = "Station"), function(x, ...)
             id = rep(id(x), ...),
             label = rep(label(x), ...),
             geometry = rep(geometry(x), ...)))
+
+#' @import sp
+setMethod("rep",
+          signature(x = "SpatialPoints"),
+          function(x, ...) {
+              coords <- coordinates(x)
+              ncoords <- matrix(rep(coords, ...), ncol = dim(coords)[[2]])
+              dimnames(ncoords) <- list(NULL, dimnames(coords)[[2]])
+              SpatialPoints(ncoords, CRS(proj4string(x)), bbox(x))
+          })
+
+
+#' @import sp
+setMethod("coordinates",
+          signature(obj = "Station"),
+          function(obj, ...) coordinates(obj@geometry))
+
+#' @import sp
+setMethod("bbox",
+          signature(obj = "Station"),
+          function(obj) bbox(obj@geometry))
+
+#' @export
+#' @import sp
+as.SpatialPointsDataFrame <- function(x)
+    as(x, "SpatialPointsDataFrame")
+
+setAs("Station", "SpatialPointsDataFrame",
+      function(from)
+          SpatialPointsDataFrame(coords = geometry(x),
+                                 data = data.frame(id = id(x),
+                                                   label = label(x))))
