@@ -16,8 +16,7 @@ Imports:
     httr,
     sp,
     stringi,
-    jsonlite,
-    memoise
+    jsonlite
 Suggests:
     testthat,
     knitr,
