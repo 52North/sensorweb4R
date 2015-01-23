@@ -24,10 +24,16 @@ label(sta)
 ts <- timeseries(e, service = srv)
 
 # fetch all metadata for a single timeseries
-ts <- fetch(ts[1])
+ts <- fetch(ts[34])
+
+# define a timespan
+time <- "2013-08-01T00:00:00Z/2013-08-02T00:00:00Z"
+
+# or more convenient
+time <- as.interval(days(1), ymd("2013-08-01"))
 
 # get the timeseries data
-data <- getData(ts)[[1]]
+data <- getData(ts, timespan = time)[[1]]
 
 # plot it
 plot(as.data.frame(data),

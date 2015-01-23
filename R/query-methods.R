@@ -19,6 +19,24 @@ as.query <- function(service = NULL,
          near = .as.parameter.list(near))
 }
 
+as.timespan.parameter <- function(x, ...) {
+    if (is.null(x) || is.na(x))
+        NULL
+    else if (is.character(x))
+        x
+    else if (is.interval(x))
+        paste(format(with_tz(c(int_start(x), int_end(x)), "UTC"),
+                     "%Y-%m-%dT%H:%M:%SZ"), collapse = '/')
+    else x
+}
+
+as.logical.parameter <- function(x, ...) {
+    if (is.null(x) || is.na(x))
+        NULL
+    else
+        ifelse(as.logical(x), "true", "false")
+}
+
 setMethod("stations",
           signature(x = "Endpoint"),
           function(x, ...) {
@@ -143,7 +161,8 @@ setMethod("getData",
           function(x,
                    generalize = FALSE,
                    timespan = NULL, ...) {
-              query <- list(generalize = generalize, timespan = timespan)
+              query <- list(generalize = as.logical.parameter(generalize),
+                            timespan = as.timespan.parameter(timespan))
               tmp <- .fetch.resourceURL(getDataURL(x), query=query)
               lapply(tmp, TimeseriesData.parse)
           });

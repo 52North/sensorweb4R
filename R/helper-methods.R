@@ -109,7 +109,7 @@ subset_or_null <- function(x, getter, i) {
 
 #' @export
 .fetch.resourceURL <- function(x, ...) {
-    args <-  as.list(substitute(list(...)))
+    args <-  list(...)
     query <- if(is.null(args$query)) list()
     else paste(names(args$query), args$query, collapse="&", sep="=")
 
