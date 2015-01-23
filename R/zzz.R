@@ -51,7 +51,6 @@ NULL # documenting null to integrate this comment into a specific rd file via @n
     flog.threshold(INFO, name = "sensorweb4R")
     .layout <- layout.format(options("sensorweb4R.loggerLayout"))
     flog.layout(.layout, name =  "sensorweb4R")
-
     packageStartupMessage("Welcome to sensorweb4R! The logging level is ", flog.threshold(), " - set it with 'flog.threshold(<level>, name = \"sensorweb4R\")'")
 }
 

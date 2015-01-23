@@ -72,13 +72,13 @@ rbind2.DomainResource <- function(x, y) {
 }
 
 setMethod("rbind2", signature("DomainResource", "DomainResource"),
-          function(x, y) concat.pair.DomainResource(x, y))
+          function(x, y) rbind2.DomainResource(x, y))
 setMethod("rbind2", signature("DomainResource", "ANY"),
-          function(x, y) concat.pair.DomainResource(x, as.DomainResource(y)))
+          function(x, y) rbind2.DomainResource(x, as.DomainResource(y)))
 setMethod("rbind2", signature("ANY", "DomainResource"),
-          function(x, y) concat.pair.DomainResource(as.DomainResource(x), y))
+          function(x, y) rbind2.DomainResource(as.DomainResource(x), y))
 setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) concat.pair.DomainResource(as.DomainResource(x), as.DomainResource(y)))
+          function(x, y) rbind2.DomainResource(as.DomainResource(x), as.DomainResource(y)))
 
 setMethod("rep", signature(x = "DomainResource"),
           function(x, ...) {

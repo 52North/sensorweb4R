@@ -16,9 +16,16 @@ as.Endpoint <- function(x) as(x, "Endpoint")
 #' @export
 length.Endpoint <- function(x) length(resourceURL(x))
 
+normalize.URL <- function(x) {
+    x <- stringi::stri_replace_last_regex(x, "\\?.*", "")
+    x <- stringi::stri_replace_last_regex(x, "#.*", "")
+    x <- stringi::stri_trim_right(x, pattern = "[^/]")
+    return(x)
+}
+
 #' @export
 Endpoint <- function(url = character(), ...)
-    new("Endpoint", url = .normalizeURL(as.character(url)), ...)
+    new("Endpoint", url = normalize.URL(as.character(url)), ...)
 
 setClassUnion("Endpoint_or_characters",
               c("Endpoint", "character"))
@@ -74,8 +81,22 @@ rbind2.Endpoint <- function(x, y) {
     y <- as.Endpoint(y)
     Endpoint(url = c(resourceURL(x), resourceURL(y)))
 }
-setMethod("rbind2", signature("Endpoint", "Endpoint"), function(x, y) concat.pair.Endpoint(x, y))
-setMethod("rbind2", signature("Endpoint", "ANY"), function(x, y) concat.pair.Endpoint(x, as.Endpoint(y)))
-setMethod("rbind2", signature("ANY", "Endpoint"), function(x, y) concat.pair.Endpoint(as.Endpoint(x), y))
-setMethod("rbind2", signature("ANY", "ANY"), function(x, y) concat.pair.Endpoint(as.Endpoint(x), as.Endpoint(y)))
+setMethod("rbind2", signature("Endpoint", "Endpoint"), function(x, y) rbind2.Endpoint(x, y))
+setMethod("rbind2", signature("Endpoint", "ANY"), function(x, y) rbind2.Endpoint(x, as.Endpoint(y)))
+setMethod("rbind2", signature("ANY", "Endpoint"), function(x, y) rbind2.Endpoint(as.Endpoint(x), y))
+setMethod("rbind2", signature("ANY", "ANY"), function(x, y) rbind2.Endpoint(as.Endpoint(x), as.Endpoint(y)))
 setMethod("rep", signature(x = "Endpoint"), function(x, ...) Endpoint(url = rep(resourceURL(x), ...)))
+
+#' @export
+random.Timeseries <- function(e) {
+    random <- function(x, n = 1) x[sample(seq_len(length(x)), n)]
+    srv <- random(services(e))
+    sta <- random(stations(e, service = srv))
+    ts <- random(timeseries(e, station = sta))
+    fetch(ts)
+}
+
+
+
+
+

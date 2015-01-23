@@ -38,10 +38,10 @@ rbind2.TVP <- function(x, y) {
     TVP(time = c(time(x), time(y)),
         value = c(value(x), value(y)))
 }
-setMethod("rbind2", signature("TVP", "TVP"), function(x, y) concat.pair.TVP(x, y))
-setMethod("rbind2", signature("TVP", "ANY"), function(x, y) concat.pair.TVP(x, as.TVP(y)))
-setMethod("rbind2", signature("ANY", "TVP"), function(x, y) concat.pair.TVP(as.TVP(x), y))
-setMethod("rbind2", signature("ANY", "ANY"), function(x, y) concat.pair.TVP(as.TVP(x), as.TVP(y)))
+setMethod("rbind2", signature("TVP", "TVP"), function(x, y) rbind2.TVP(x, y))
+setMethod("rbind2", signature("TVP", "ANY"), function(x, y) rbind2.TVP(x, as.TVP(y)))
+setMethod("rbind2", signature("ANY", "TVP"), function(x, y) rbind2.TVP(as.TVP(x), y))
+setMethod("rbind2", signature("ANY", "ANY"), function(x, y) rbind2.TVP(as.TVP(x), as.TVP(y)))
 setMethod("rep", signature(x = "TVP"), function(x, ...)
     TVP(time = rep(time(x), ...),
         value = rep(value(x), ...)))

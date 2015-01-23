@@ -82,13 +82,13 @@ rbind2.StatusInterval <- function(x, y)  {
                    name = c(name(x), name(y)))
 }
 setMethod("rbind2", signature("StatusInterval", "StatusInterval"),
-          function(x, y) concat.pair.StatusInterval(x, y))
+          function(x, y) rbind2.StatusInterval(x, y))
 setMethod("rbind2", signature("StatusInterval", "ANY"),
-          function(x, y) concat.pair.StatusInterval(x, as.StatusInterval(y)))
+          function(x, y) rbind2.StatusInterval(x, as.StatusInterval(y)))
 setMethod("rbind2", signature("ANY", "StatusInterval"),
-          function(x, y) concat.pair.StatusInterval(as.StatusInterval(x), y))
+          function(x, y) rbind2.StatusInterval(as.StatusInterval(x), y))
 setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) concat.pair.StatusInterval(as.StatusInterval(x),
+          function(x, y) rbind2.StatusInterval(as.StatusInterval(x),
                                                     as.StatusInterval(y)))
 setMethod("rep", signature(x = "StatusInterval"),
           function(x, ...)

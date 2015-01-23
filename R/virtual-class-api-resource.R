@@ -79,11 +79,23 @@ setMethod("endpoint<-",
               invisible(x)
           })
 
+collection.name <- function(x) {
+    switch(class(x),
+           Service = "services",
+           Station = "stations",
+           Timeseries = "timeseries",
+           Category = "categories",
+           Offering = "offerings",
+           Feature = "features",
+           Procedure = "procedures",
+           Phenomenon = "phenomena")
+}
+
 setMethod("resourceURL",
           signature(x = "ApiResource"),
           function(x) {
               paste(resourceURL(endpoint(x)),
-                    .collectionName(x),
+                    collection.name(x),
                     id(x),
                     sep = "/")
           })

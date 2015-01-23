@@ -150,7 +150,7 @@ setAs("character", "Service", function(from) Service(id = from))
 rbind2.Service <- function(x, y) {
     x <- as.Service(x)
     y <- as.Service(y)
-    Service(endpoint = concat(endpoint(x), endpoint(y)),
+    Service(endpoint = rbind2(endpoint(x), endpoint(y)),
             id = c(id(x), id(y)),
             label = c(label(x), label(y)),
             serviceURL = c(serviceURL(x), serviceURL(y)),
@@ -160,13 +160,13 @@ rbind2.Service <- function(x, y) {
             quantities = rbind(quantities(x), quantities(y)))
 }
 setMethod("rbind2", signature("Service", "Service"),
-          function(x, y) concat.pair.Service(x, y))
+          function(x, y) rbind2.Service(x, y))
 setMethod("rbind2", signature("Service", "ANY"),
-          function(x, y) concat.pair.Service(x, as.Service(y)))
+          function(x, y) rbind2.Service(x, as.Service(y)))
 setMethod("rbind2", signature("ANY", "Service"),
-          function(x, y) concat.pair.Service(as.Service(x), y))
+          function(x, y) rbind2.Service(as.Service(x), y))
 setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) concat.pair.Service(as.Service(x),
+          function(x, y) rbind2.Service(as.Service(x),
                                              as.Service(y)))
 
 setMethod("rep", signature(x = "Service"), function(x, ...)

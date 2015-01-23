@@ -280,21 +280,21 @@ rbind2.Timeseries <- function(x, y) {
     x <- as.Timeseries(x)
     y <- as.Timeseries(y)
 
-    Timeseries(endpoint = rbind(endpoint(x), endpoint(y)),
+    Timeseries(endpoint = rbind2(endpoint(x), endpoint(y)),
                id = c(id(x), id(y)),
                label = c(label(x), label(y)),
                uom = c(uom(x), uom(y)),
-               phenomenon = rbind(phenomenon(x), phenomenon(y)),
-               service = rbind(service(x), service(y)),
-               category = rbind(category(x), category(y)),
-               feature = rbind(feature(x), feature(y)),
-               offering = rbind(offering(x), offering(y)),
-               procedure = rbind(procedure(x), procedure(y)),
-               station = rbind(station(x), station(y)),
-               referenceValues = rbind(referenceValues(x), referenceValues(y)),
-               firstValue = rbind(firstValue(x), firstValue(y)),
+               phenomenon = rbind2(phenomenon(x), phenomenon(y)),
+               service = rbind2(service(x), service(y)),
+               category = rbind2(category(x), category(y)),
+               feature = rbind2(feature(x), feature(y)),
+               offering = rbind2(offering(x), offering(y)),
+               procedure = rbind2(procedure(x), procedure(y)),
+               station = rbind2(station(x), station(y)),
+               referenceValues = c(referenceValues(x), referenceValues(y)),
+               firstValue = rbind2(firstValue(x), firstValue(y)),
                statusIntervals = c(statusIntervals(x), statusIntervals(y)),
-               lastValue = rbind(lastValue(x), lastValue(y)))
+               lastValue = rbind2(lastValue(x), lastValue(y)))
 }
 setMethod("rbind2", signature("Timeseries", "Timeseries"),
           function(x, y) rbind2.Timeseries(x, y))

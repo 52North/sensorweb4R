@@ -66,7 +66,7 @@ get_stations <- function(endpoint, service=NULL, category=NULL,
     queryParameter <- list(crs = crs, bbox = bbox, near = near,
                            service = service, category = category,
                            phenomenon = phenomenon)
-    json <- .get_json(.stations_url(endpoint), query=queryParameter)
+    json <- get.json(.stations_url(endpoint), query=queryParameter)
     stations <- .geojson_to_spdf(json)
     return(stations)
 }

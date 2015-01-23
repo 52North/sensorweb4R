@@ -34,7 +34,7 @@ setAs("character", "ReferenceValue",
 rbind2.ReferenceValue <- function(x, y) {
     x <- as.ReferenceValue(x)
     y <- as.ReferenceValue(y)
-    ReferenceValue(endpoint = concat(endpoint(x), endpoint(y)),
+    ReferenceValue(endpoint = rbind2(endpoint(x), endpoint(y)),
                    id = c(id(x), id(y)),
                    label = c(label(x), label(y)),
                    time = c(time(x), time(y)),
@@ -43,19 +43,19 @@ rbind2.ReferenceValue <- function(x, y) {
 setMethod("rbind2",
           signature("ReferenceValue", "ReferenceValue"),
           function(x, y)
-              concat.pair.ReferenceValue(x, y))
+              rbind2.ReferenceValue(x, y))
 setMethod("rbind2", signature("ReferenceValue", "ANY"),
           function(x, y)
-              concat.pair.ReferenceValue(x, as.ReferenceValue(y)))
+              rbind2.ReferenceValue(x, as.ReferenceValue(y)))
 setMethod("rbind2",
           signature("ANY", "ReferenceValue"),
           function(x, y)
-              concat.pair.ReferenceValue(as.ReferenceValue(x), y))
+              rbind2.ReferenceValue(as.ReferenceValue(x), y))
 setMethod("rbind2",
           signature("ANY", "ANY"),
           function(x, y)
-              concat.pair.ReferenceValue(as.ReferenceValue(x),
-                                         as.ReferenceValue(y)))
+              rbind2.ReferenceValue(as.ReferenceValue(x),
+                                    as.ReferenceValue(y)))
 setMethod("rep",
           signature(x = "ReferenceValue"),
           function(x, ...)

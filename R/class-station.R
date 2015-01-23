@@ -57,20 +57,19 @@ setAs("character", "Station", function(from) Station(id = from))
 rbind2.Station <- function(x, y) {
     x <- as.Station(x)
     y <- as.Station(y)
-    Station(endpoint = rbind(endpoint(x), endpoint(y)),
+    Station(endpoint = rbind2(endpoint(x), endpoint(y)),
             id = c(id(x), id(y)),
             label = c(label(x), label(y)),
-            geometry = c(geometry(x), geometry(y)))
+            geometry = rbind2(geometry(x), geometry(y)))
 }
 setMethod("rbind2", signature("Station", "Station"),
           function(x, y) rbind2.Station(x, y))
 setMethod("rbind2", signature("Station", "ANY"),
-          function(x, y) rbind2.Station(x, as.Station(y)))
+          function(x, y) rbind2(x, as.Station(y)))
 setMethod("rbind2", signature("ANY", "Station"),
-          function(x, y) rbind2.Station(as.Station(x), y))
+          function(x, y) rbind2(as.Station(x), y))
 setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) rbind2.Station(as.Station(x),
-                                        as.Station(y)))
+          function(x, y) rbind2(as.Station(x), as.Station(y)))
 
 setMethod("rep", signature(x = "Station"), function(x, ...)
     Station(endpoint = rep(endpoint(x), ...),
@@ -79,6 +78,35 @@ setMethod("rep", signature(x = "Station"), function(x, ...)
             geometry = rep(geometry(x), ...)))
 
 #' @import sp
+setMethod("rep",
+          signature(x = "SpatialPoints"),
+          function(x, ...) {
+              coords <- coordinates(x)
+              ncoords <- matrix(rep(coords, ...), ncol = dim(coords)[[2]])
+              dimnames(ncoords) <- list(NULL, dimnames(coords)[[2]])
+              SpatialPoints(ncoords, CRS(proj4string(x)), bbox(x))
+          })
+
+#' @import sp
+rbind2.SpatialPoints <- function(x, y) {
+    x <- as(x, "SpatialPoints")
+    y <- as(y, "SpatialPoints")
+    coordsx <- coordinates(x)
+    coordsy <- coordinates(y)
+    if (dim(coordsx)[[2]] != dim(coordsy)[[2]])
+        stop("Incompatible coordinate dimensions")
+    if (proj4string(x) != proj4string(y))
+        stop("Incompatible coordinate reference systems")
+    SpatialPoints(rbind(coordsx, coordsy), CRS(proj4string(x)))
+}
+
+setMethod("rbind2", signature("SpatialPoints", "SpatialPoints"),
+          function(x, y) rbind2.SpatialPoints(x, y))
+setMethod("rbind2", signature("SpatialPoints", "ANY"),
+          function(x, y) rbind2(x, as(y, "SpatialPoints")))
+setMethod("rbind2", signature("ANY", "SpatialPoints"),
+          function(x, y) rbind2(as(x, "SpatialPoints"), y))
+
 setMethod("rep",
           signature(x = "SpatialPoints"),
           function(x, ...) {

@@ -58,20 +58,20 @@ setAs("character", "Category", function(from) Category(id = from))
 rbind2.Category <- function(x, y) {
     x <- as.Category(x)
     y <- as.Category(y)
-    Category(endpoint = c(endpoint(x), endpoint(y)),
+    Category(endpoint = rbind2(endpoint(x), endpoint(y)),
              id = c(id(x), id(y)),
              label = c(label(x), label(y)),
-             service = concat(service(x), service(y)))
+             service = rbind2(service(x), service(y)))
 }
 setMethod("rbind2", signature("Category", "Category"),
-          function(x, y) concat.pair.Category(x, y))
+          function(x, y) rbind2.Category(x, y))
 setMethod("rbind2", signature("Category", "ANY"),
-          function(x, y) concat.pair.Category(x, as.Category(y)))
+          function(x, y) rbind2.Category(x, as.Category(y)))
 setMethod("rbind2", signature("ANY", "Category"),
-          function(x, y) concat.pair.Category(as.Category(x), y))
+          function(x, y) rbind2.Category(as.Category(x), y))
 setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) concat.pair.Category(as.Category(x),
-                                              as.Category(y)))
+          function(x, y) rbind2.Category(as.Category(x),
+                                         as.Category(y)))
 setMethod("rep", signature(x = "Category"),
           function(x, ...)
               Category(endpoint = rep(endpoint(x), ...),
