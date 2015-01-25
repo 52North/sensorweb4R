@@ -45,3 +45,11 @@ setMethod("rbind2", signature("ANY", "ANY"), function(x, y) rbind2.TVP(as.TVP(x)
 setMethod("rep", signature(x = "TVP"), function(x, ...)
     TVP(time = rep(time(x), ...),
         value = rep(value(x), ...)))
+
+#' @export
+as.numeric.TVP <- function(x, ...) value(x)
+setAs("TVP", "numeric", function(from) value(from))
+
+#' @export
+as.POSIXct.TVP <- function(x, ...) time(x)
+setAs("TVP", "POSIXct", function(from) time(from))
