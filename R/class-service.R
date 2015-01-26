@@ -146,6 +146,7 @@ Service <- function(id = character(),
 }
 
 setAs("character", "Service", function(from) Service(id = from))
+setAs("list", "Service", function(from) concat.list(from))
 
 rbind2.Service <- function(x, y) {
     x <- as.Service(x)

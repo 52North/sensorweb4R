@@ -74,7 +74,7 @@ setMethod("length",
           length.Endpoint)
 
 setAs("character", "Endpoint", function(from) Endpoint(url = from))
-
+setAs("list", "Endpoint", function(from) concat.list(from))
 
 rbind2.Endpoint <- function(x, y) {
     x <- as.Endpoint(x)

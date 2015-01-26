@@ -274,7 +274,7 @@ setMethod("getDataURL",
           function(x) subresourceURL(x, "getData"))
 
 setAs("character", "Timeseries", function(from) Timeseries(id = from))
-
+setAs("list", "Timeseries", function(from) concat.list(from))
 
 rbind2.Timeseries <- function(x, y) {
     x <- as.Timeseries(x)

@@ -53,6 +53,7 @@ setMethod("geometry<-",
           })
 
 setAs("character", "Station", function(from) Station(id = from))
+setAs("list", "Station", function(from) concat.list(from))
 
 rbind2.Station <- function(x, y) {
     x <- as.Station(x)

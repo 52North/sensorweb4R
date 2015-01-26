@@ -30,7 +30,8 @@ ReferenceValue <- function(id = character(),label = NULL,
 
 setAs("character", "ReferenceValue",
       function(from) ReferenceValue(id = from))
-
+setAs("list", "ReferenceValue",
+      function(from) concat.list(from))
 rbind2.ReferenceValue <- function(x, y) {
     x <- as.ReferenceValue(x)
     y <- as.ReferenceValue(y)

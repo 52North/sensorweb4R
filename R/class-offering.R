@@ -24,3 +24,4 @@ Offering <- function(...)
     DomainResource(type = "Offering", ...)
 
 setAs("character", "Offering", function(from) Offering(id = from))
+setAs("list", "Offering", function(from) concat.list(from))

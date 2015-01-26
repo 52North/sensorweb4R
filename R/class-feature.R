@@ -22,3 +22,4 @@ Feature <- function(...)
     DomainResource(type = "Feature", ...)
 
 setAs("character", "Feature", function(from) Feature(id = from))
+setAs("list", "Feature", function(from) concat.list(from))

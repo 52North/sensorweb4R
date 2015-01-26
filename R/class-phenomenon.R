@@ -23,3 +23,5 @@ Phenomenon <- function(...)
 
 setAs("character", "Phenomenon",
       function(from) Phenomenon(id = from))
+setAs("list", "Phenomenon",
+      function(from) concat.list(from))
