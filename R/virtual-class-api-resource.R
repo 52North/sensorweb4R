@@ -42,9 +42,8 @@ setMethod("as.list",
           as.list.ApiResource)
 
 #' @export
-unique.ApiResource <- function(x, ...) {
-    x[sapply(id(x), function(id) which.max(id(x) == id))]
-}
+unique.ApiResource <- function(x, ...)
+    x[sapply(unique(id(x)), function(id) which.max(id(x) == id))]
 
 setMethod("unique",
           signature(x = "ApiResource"),
