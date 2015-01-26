@@ -41,7 +41,7 @@ setMethod("domainId",
 
 setMethod("domainId<-",
           signature(x = "DomainResource",
-                    value = "character"),
+                    value = "character_or_NULL"),
           function(x, value) {
               x@domainId <- stretch(length(x), value, NA, as.character)
               invisible(x)
@@ -53,7 +53,7 @@ setMethod("service",
 
 setMethod("service<-",
           signature(x = "DomainResource",
-                    value = "Service"),
+                    value = "Service_or_NULL"),
           function(x, value) {
               x@service <- stretch(length(x), value, as.character(NA), as.Service)
               invisible(x)
