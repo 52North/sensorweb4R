@@ -16,8 +16,7 @@
 #'
 #' Creates a distance matrix for the supplied coordinates.
 #'
-#' @param x a Nx2 matrix of WGS84 coordinates or
-#'        a \code{sp::SpatialPointsDataFrame}
+#' @param x a Nx2 matrix of WGS84 coordinates or a \code{sp::SpatialPointsDataFrame}
 #' @return the distance matrix of class \code{dist}
 #' @export
 #' @examples
@@ -41,7 +40,7 @@ create_distance_matrix <- function(x) {
 #' Saves a distance matrix to disk.
 #'
 #' @param dm the distance matrix
-#' @param the file name
+#' @param file the file name
 #' @export
 #' @examples
 #' \dontrun{
