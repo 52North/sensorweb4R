@@ -36,9 +36,7 @@ as.query <- function(service = NULL, category = NULL, phenomenon = NULL,
                   crs = as.parameter.list(crs),
                   bbox = as.parameter.list(bbox),
                   near = as.parameter.list(near))
-
-    futile.logger::flog.debug(toString(query))
-    query
+    query[!as.logical(lapply(query, is.null))]
 }
 
 format.interval <- function(x)
@@ -60,10 +58,15 @@ as.logical.parameter <- function(x, ...) {
 fetch.resource <- function(x, ...)
     fetch.resourceURL(resourceURL(x), ...)
 
+as.query.string <- function(...) {
+    query <- list(...)
+    paste(names(query), query, collapse = "&", sep = "=")
+}
+
 fetch.resourceURL <- function(x, ...) {
     args <-  list(...)
     query <- if(is.null(args$query)) list()
-    else paste(names(args$query), args$query, collapse="&", sep="=")
+    else do.call(as.query.string, args$query)
 
     tofetch <- unique(x)
 
@@ -79,7 +82,9 @@ fetch.resourceURL <- function(x, ...) {
 }
 
 get.json <- function(url, ...) {
-    futile.logger::flog.debug("Requesting %s", url)
+    p <- list(...)
+    q <- ifelse(!is.null(p$query), do.call(as.query.string, p$query), "")
+    futile.logger::flog.debug("Requesting %s?%s", url, q)
     response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
     httr::stop_for_status(response)
     jsonlite::fromJSON(httr::content(response, "text"))
