@@ -135,6 +135,6 @@ as.SpatialPointsDataFrame <- function(x)
 
 setAs("Station", "SpatialPointsDataFrame",
       function(from)
-          SpatialPointsDataFrame(coords = geometry(x),
-                                 data = data.frame(id = id(x),
-                                                   label = label(x))))
+          SpatialPointsDataFrame(coords = geometry(from),
+                                 data = data.frame(id = id(from),
+                                                   label = label(from))))
