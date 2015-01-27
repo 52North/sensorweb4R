@@ -18,6 +18,7 @@ vignette: >
 ---
 
 <!--
+require("rmarkdown")
 render("vignettes//sensorweb4R.Rmd", "all")
 -->
 
