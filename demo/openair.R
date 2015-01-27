@@ -2,46 +2,54 @@ library(sensorweb4R)
 library(sp)
 library(openair)
 
+stations.by.phenomena <- function(e, phenomena, ...) {
+    sta <- lapply(phenomena, function(x)
+        stations(e, phenomenon = x, ...))
+    sta <- Reduce(intersect, lapply(sta, id))
+    fetch(Station(sta, endpoint = e))
+}
+
+timeseries.by.phenomena <- function(e, phenomena, ...) {
+    ts <- lapply(phenomena, function(x)
+        timeseries(e, phenomenon = x, ...))
+    fetch(as.Timeseries(ts))
+}
+
 futile.logger::flog.threshold(futile.logger::DEBUG, name = "sensorweb4R")
 
-e <- as.Endpoint("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/")
-# find the right service
-srv <- fetch(services(e))
-srv <- srv[serviceURL(srv) == "http://sos.irceline.be/sos"]
+e <- Endpoint("http://sos2.irceline.be/52n-sos-webapp/api/v1/")
+#e <- Endpoint("http://sosrest.irceline.be/api/v1/")
 
-# find the right phenomena
-phe <- phenomena(srv)
-phe <- fetch(phe[label(phe) %in% c("61110 - WSP-SCA", "61102 - DD", "81102 - PM10")])
+# direction, speed
+phe.wind <- Phenomenon(id=c("61102", "61110"),endpoint = e)
 
 # get a station with all phenomenons
-sta <- Reduce(intersect, lapply(phe, function(x) {
-    id(stations(srv, phenomenon = x))
-}))
-sta <- fetch(Station(sta, endpoint = e))
+station <- stations.by.phenomena(e, phe.wind)[1]
+
+# get a pollutant (lets forget that the only pollutant
+# available for the station is temperature ;))
+phe.pollutant <- phenomena(station)
+phe.pollutant <- sample(phe.pollutant[!id(phe.pollutant) %in% id(phe.wind)], 1)
 
 # fetch the corresponding timeseries
-ts <- fetch(do.call(function(x, y, ...) {
-    x <- rbind2(x, y)
-    if (nargs()>2) Recall(x, ...) else x
-}, lapply(phe, function(x) timeseries(sta, phenomenon = x))))
+ts <- timeseries.by.phenomena(e, rbind2(phe.wind, phe.pollutant), station = station)
 
+# get the data
 data <- getData(ts)
-wind.speed <- data[[1]]
-wind.direction <- data[[2]]
-pollutant.pm10 <- data[[3]]
 
-# strangly we do not have any wind data,
-# so fill in some fake values
-wind.speed <- TVP(time(pollutant.pm10),
-                  runif(length(pollutant.pm10), 0, 100))
-wind.direction <- TVP(time(pollutant.pm10),
-                      runif(length(pollutant.pm10), 0, 360))
+# filter out measurements with partial data
+# and convert the data to a data.frame
+times <- unique(sort(do.call(c, lapply(data, time))))
+data <- data.frame(lapply(data, function(x) value(x)[match(times, time(x))]))
+names(data) <- sapply(ts, function(x) switch(id(phenomenon(x)), "61102" = "wd", "61110" = "ws",id(phenomenon(x))))
+data$date <- times
 
-# create a data.frame for openair
-df <- data.frame(time = time(pollutant.pm10),
-                 pm10 = value(pollutant.pm10),
-                 ws = value(wind.speed),
-                 wd = value(wind.direction))
+# filter out invalid values
+data<-data[data[[id(phe.pollutant)]] != -9999.0,]
+
+# i've _no_ idea
+data$wd <- data$wd %% 360
 
 # plot it
-pollutionRose(df, pollutant = "pm10")
+pollutionRose(data, pollutant = names(data)[!names(data) %in% c("wd", "ws", "date")])
+
