@@ -100,6 +100,10 @@ Notes for development:
 * Paging: was planned at some point and is partially specified (only the headers) but is not implemented
 * geometries use GeoJSON, check if there is a package with parsing functions for the geometries used in Timeseries API (leafletR has only ..toGeoJSON functions)
 
+## Caching
+
+All requests to specific resources (e.g. stations, phenomenons, etc.) are cached by `sensorweb4R` in the global variable ``.sensorweb4R.cache` to reduce HTTP requests to the Timeseries API. The cache contains the JSON responses (parsed by `jsonlite`) by their respective URL; collections of resources are not cached. You can inspect the cache using the convenience functions `get.cache`, `get.cache.value` and `get.cache.keys` or manipulate it using `clear.cache`, `set.cache`, `set.cache.value` and `set.cache.values`.
+
 ### Example code for discussion of development paradigm
 
 Using **S4 classes**:
