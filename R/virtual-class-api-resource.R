@@ -67,6 +67,18 @@ setMethod("label<-",
               invisible(x)
           })
 
+setMethod("names",
+          signature(x = "ApiResource"),
+          function(x) label(x))
+
+setMethod("names<-",
+          signature(x = "ApiResource",
+                    value = "character_or_NULL"),
+          function(x, value) {
+              label(x) <- value
+              invisible(x)
+          })
+
 setMethod("endpoint",
           signature(x = "ApiResource"),
           function(x) x@endpoint)
