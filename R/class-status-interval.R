@@ -81,6 +81,9 @@ rbind2.StatusInterval <- function(x, y)  {
                    color = c(color(x), color(y)),
                    name = c(name(x), name(y)))
 }
+
+setAs("list", "StatusInterval", function(from) concat.list(from))
+
 setMethod("rbind2", signature("StatusInterval", "StatusInterval"),
           function(x, y) rbind2.StatusInterval(x, y))
 setMethod("rbind2", signature("StatusInterval", "ANY"),

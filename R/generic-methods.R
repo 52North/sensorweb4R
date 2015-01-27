@@ -231,3 +231,7 @@ concat <- function(x, ...) {
     if (nargs() < 3) rbind2(x, ...)
     else rbind2(x, Recall(...))
 }
+
+concat.list <- function(list) {
+    do.call(concat, list)
+}

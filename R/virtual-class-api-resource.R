@@ -42,9 +42,8 @@ setMethod("as.list",
           as.list.ApiResource)
 
 #' @export
-unique.ApiResource <- function(x, ...) {
-    x[sapply(id(x), function(id) which.max(id(x) == id))]
-}
+unique.ApiResource <- function(x, ...)
+    x[sapply(unique(id(x)), function(id) which.max(id(x) == id))]
 
 setMethod("unique",
           signature(x = "ApiResource"),
@@ -101,6 +100,45 @@ collection.name <- function(x) {
            Feature = "features",
            Procedure = "procedures",
            Phenomenon = "phenomena")
+}
+
+class.name <- function(x) {
+    switch(x,
+           services = Service,
+           stations = Station,
+           timeseries = Timeseries,
+           categories = Category,
+           offerings = Offering,
+           features = Feature,
+           procedures = Procedure,
+           phenomena = Phenomenon)
+}
+
+#' @export
+fromURI <- function(uri) {
+    regex <- function(pattern, text) {
+        result <- regexec(pattern, text)
+        length <- sapply(result, attr, "match.length")
+        result <- simplify2array(result)
+        function(x) {
+            begin <- result[x,]
+            end <- begin + length[x,] - 1
+            substr(text, begin, end)
+        }
+    }
+    pattern <- "(^.*/v1/)([^/]*)/([^/?]*)"
+    result <- regex(pattern, as.character(uri))
+    ept <- result(2)
+    type <- result(3)
+    id <- result(4)
+    type.unique <- unique(type)
+    o <- lapply(type.unique, function(x) {
+        f <- class.name(x)
+        fetch(unique(f(id = id[x == type],
+                endpoint = Endpoint(ept[x == type]))))
+    })
+    names(o) <- type.unique
+    o
 }
 
 setMethod("resourceURL",

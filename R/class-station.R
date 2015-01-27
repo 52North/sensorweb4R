@@ -53,6 +53,7 @@ setMethod("geometry<-",
           })
 
 setAs("character", "Station", function(from) Station(id = from))
+setAs("list", "Station", function(from) concat.list(from))
 
 rbind2.Station <- function(x, y) {
     x <- as.Station(x)
@@ -134,6 +135,6 @@ as.SpatialPointsDataFrame <- function(x)
 
 setAs("Station", "SpatialPointsDataFrame",
       function(from)
-          SpatialPointsDataFrame(coords = geometry(x),
-                                 data = data.frame(id = id(x),
-                                                   label = label(x))))
+          SpatialPointsDataFrame(coords = geometry(from),
+                                 data = data.frame(id = id(from),
+                                                   label = label(from))))

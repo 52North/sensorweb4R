@@ -31,7 +31,7 @@ TVP <- function(time = character(), value = numeric()) {
 setMethod("value", signature(x = "TVP"), function(x) x@value)
 setMethod("time", signature(x = "TVP"), function(x) x@time)
 setMethod("length", signature("TVP"), length.TVP)
-
+setAs("list", "TVP", function(from) concat.list(from))
 rbind2.TVP <- function(x, y) {
     x <- as.TVP(x)
     y <- as.TVP(y)

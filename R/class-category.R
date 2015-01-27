@@ -53,7 +53,7 @@ setMethod("service<-",
           })
 
 setAs("character", "Category", function(from) Category(id = from))
-
+setAs("list", "Category", function(from) concat.list(from))
 
 rbind2.Category <- function(x, y) {
     x <- as.Category(x)

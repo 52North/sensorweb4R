@@ -22,3 +22,4 @@ Procedure <- function(...)
     DomainResource(type = "Procedure", ...)
 
 setAs("character", "Procedure", function(from) Procedure(id = from))
+setAs("list", "Procedure", function(from) concat.list(from))
