@@ -69,13 +69,13 @@ setMethod("label<-",
 
 setMethod("names",
           signature(x = "ApiResource"),
-          function(x) label(x))
+          function(x) sensorweb4R::label(x))
 
 setMethod("names<-",
           signature(x = "ApiResource",
                     value = "character_or_NULL"),
           function(x, value) {
-              label(x) <- value
+              sensorweb4R::label(x) <- value
               invisible(x)
           })
 
