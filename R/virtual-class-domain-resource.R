@@ -4,15 +4,18 @@
 #' @include class-service.R
 NULL
 
-
-#' @export
+#' Domain Resource
+#'
+#' @exportClass DomainResource
+#' @rdname DomainResource-class
+#' @name DomainResource-class
 setClass("DomainResource",
          contains = c("VIRTUAL",
                       "ApiResource"),
          slots = list(domainId = "character",
                       service = "Service_or_NULL"))
 
-#' @export
+#' @describeIn DomainResource-class Constructs a new \code{DomainResource}.
 DomainResource <- function(type, id = character(), label = NULL,
                            domainId = NULL, service = NULL,
                            endpoint= NULL) {
@@ -30,15 +33,20 @@ DomainResource <- function(type, id = character(), label = NULL,
                domainId = domainId))
 }
 
+#' @describeIn DomainResource-class Checks if \code{x} is a \code{DomainResource}.
 #' @export
 is.DomainResource <- function(x) is(x, "DomainResource")
+
+#' @describeIn DomainResource-class Coerces \code{x} to a \code{DomainResource}.
 #' @export
 as.DomainResource <- function(x) as(x, "DomainResource")
 
+#' @rdname accessor-methods
 setMethod("domainId",
           signature(x = "DomainResource"),
           function(x) x@domainId)
 
+#' @rdname accessor-methods
 setMethod("domainId<-",
           signature(x = "DomainResource",
                     value = "character_or_NULL"),
@@ -47,10 +55,12 @@ setMethod("domainId<-",
               invisible(x)
           })
 
+#' @rdname accessor-methods
 setMethod("service",
           signature(x = "DomainResource"),
           function(x) x@service)
 
+#' @rdname accessor-methods
 setMethod("service<-",
           signature(x = "DomainResource",
                     value = "Service_or_NULL"),
@@ -71,15 +81,23 @@ rbind2.DomainResource <- function(x, y) {
         service = concat(service(x), service(y)))
 }
 
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("DomainResource", "DomainResource"),
           function(x, y) rbind2.DomainResource(x, y))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("DomainResource", "ANY"),
           function(x, y) rbind2.DomainResource(x, as.DomainResource(y)))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("ANY", "DomainResource"),
           function(x, y) rbind2.DomainResource(as.DomainResource(x), y))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("ANY", "ANY"),
           function(x, y) rbind2.DomainResource(as.DomainResource(x), as.DomainResource(y)))
 
+#' @rdname rep-methods
 setMethod("rep", signature(x = "DomainResource"),
           function(x, ...) {
               cnstr <- get(class(x), mode = "function")

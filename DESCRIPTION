@@ -16,15 +16,16 @@ Imports:
     httr,
     sp,
     stringi,
-    jsonlite
+    jsonlite,
+    xts,
+    zoo,
+    stats,
+    lubridate
 Suggests:
     testthat,
     knitr,
     devtools,
     pander,
-    lubridate,
-    xts,
-    zoo,
     openair
 VignetteBuilder: knitr
 Collate:

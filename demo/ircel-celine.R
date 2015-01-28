@@ -73,7 +73,7 @@ time <- "2013-08-01T00:00:00Z/2013-08-02T00:00:00Z"
 time <- as.interval(days(1), ymd("2013-08-01"))
 
 # get the timeseries data
-data <- getData(ts, timespan = time)[[1]]
+data <- getData(ts[1], timespan = time)[[1]]
 ....("Data is requested and can be analyzed further in R immediately. Press <Return> to continue.")
 
 str(data)
@@ -84,6 +84,8 @@ data.df <- as.data.frame(data)
 
 # statistical overview
 summary(data.df)
+
+ts <- fetch(ts)
 
 # plot it
 plot(data.df,

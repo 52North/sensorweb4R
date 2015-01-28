@@ -1,6 +1,5 @@
 #' @include class-tvp.R
 #' @include class-timeseries.R
-NULL
 
 #' @export
 #' @import zoo
@@ -32,6 +31,7 @@ as.xts.Timeseries <- function(x, ...) {
 }
 
 #' @export
+#' @import stats
 as.ts.Timeseries <- function(x, ...) {
     lapply(getData(x), as.ts)
 }

@@ -24,6 +24,20 @@ as.parameter.list <- function(x) {
     else paste(x, collapse=",")
 }
 
+#' Query Helper
+#'
+#' Transforms the parameters to a query list.
+#'
+#' @param service A \linkS4class{Service} or character identifier to filter with.
+#' @param category A \linkS4class{Category} or character identifier to filter with.
+#' @param phenomenon A \linkS4class{Phenomenon} or character identifier to filter with.
+#' @param station A \linkS4class{Station} or character identifier to filter with.
+#' @param timespan A \linkS4class{lubridate::interval} or a character vector to filter with.
+#' @param crs A CRS identifier.
+#' @param bbox A bouding box character vector.
+#' @param near A point character vector.
+#' @param locale A locale character vector
+#' @keywords internal
 as.query <- function(service = NULL, category = NULL, phenomenon = NULL,
                      crs = NULL, bbox = NULL, near = NULL, timespan = NULL,
                      station = NULL, locale = NULL) {
@@ -40,7 +54,8 @@ as.query <- function(service = NULL, category = NULL, phenomenon = NULL,
 }
 
 format.interval <- function(x)
-    paste(format(with_tz(c(int_start(x), int_end(x)), "UTC"),
+    paste(format(lubridate::with_tz(c(lubridate::int_start(x),
+                                      lubridate::int_end(x)), "UTC"),
                  "%Y-%m-%dT%H:%M:%SZ"), collapse = '/')
 
 as.timespan.parameter <- function(x, ...) {
@@ -104,118 +119,161 @@ simplify.list <- function(x, path) {
     do.call(mapply, c(list(FUN=c, SIMPLIFY=F), x))
 }
 
-
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("stations",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), stationsURL, Station.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("phenomena",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), phenomenaURL, Phenomenon.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("categories",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), categoriesURL, Category.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("features",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), featuresURL, Feature.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("offerings",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), offeringsURL, Offering.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("procedures",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), proceduresURL, Procedure.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("timeseries",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), timeseriesURL, Timeseries.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("services",
           signature(x = "Endpoint"),
           function(x, ...)
               get.and.parse(x, as.query(...), servicesURL, Service.parse))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("stations",
           signature(x = "Service"),
           function(x, ...)
               stations(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("phenomena",
           signature(x = "Service"),
           function(x, ...)
               phenomena(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("features",
           signature(x = "Service"),
           function(x, ...)
               features(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("categories",
           signature(x = "Service"),
           function(x, ...)
               categories(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("timeseries",
           signature(x = "Service"),
           function(x, ...)
               timeseries(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("offerings",
           signature(x = "Service"),
           function(x, ...)
               offerings(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("procedures",
           signature(x = "Service"),
           function(x, ...)
               procedures(endpoint(x), service = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("services",
           signature(x = "Station"),
           function(x, ...)
               services(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("phenomena",
           signature(x = "Station"),
           function(x, ...)
               phenomena(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("features",
           signature(x = "Station"),
           function(x, ...)
               features(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("categories",
           signature(x = "Station"),
           function(x, ...)
               categories(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("timeseries",
           signature(x = "Station"),
           function(x, ...)
               timeseries(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("offerings",
           signature(x = "Station"),
           function(x, ...)
               offerings(endpoint(x), station = x, ...))
 
+#' @rdname query-methods
+#' @inheritParams as.query
 setMethod("procedures",
           signature(x = "Station"),
           function(x, ...)
               procedures(endpoint(x), station = x, ...))
 
-
+#' @rdname fetch-methods
 setMethod("fetch",
           signature(x = "Service"),
           function(x, ...) {
@@ -230,6 +288,7 @@ setMethod("fetch",
               x
           })
 
+#' @rdname fetch-methods
 setMethod("fetch",
           signature(x = "DomainResource"),
           function(x, ...) {
@@ -243,6 +302,7 @@ setMethod("fetch",
               x
           })
 
+#' @rdname fetch-methods
 setMethod("fetch",
           signature(x = "Category"),
           function(x, ...) {
@@ -255,6 +315,7 @@ setMethod("fetch",
               x
           })
 
+#' @rdname fetch-methods
 setMethod("fetch",
           signature(x = "Station"),
           function(x, ...) {
@@ -267,6 +328,7 @@ setMethod("fetch",
               x
           })
 
+#' @rdname fetch-methods
 setMethod("fetch",
           signature(x = "Timeseries"),
           function(x, ...) {
@@ -307,6 +369,7 @@ setMethod("fetch",
               x
           })
 
+#' @rdname query-methods
 setMethod("getData",
           signature(x = "Timeseries"),
           function(x,

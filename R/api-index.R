@@ -29,7 +29,8 @@
 #' sensorweb_index(sensorweb_api_endpoints()[[1]])
 
 sensorweb_index <- function(url, ...) {
-    if(is.null(url) || is.na(url)) stop("URL parameter must be provided.")
+    if (is.null(url) || is.na(url))
+    	stop("URL parameter must be provided.")
 
     #flog.info("Requesting index from %s", url)
 
