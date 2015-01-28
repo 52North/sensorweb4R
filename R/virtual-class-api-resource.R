@@ -132,6 +132,7 @@ fromURI <- function(uri) {
 setMethod("resourceURL",
           signature(x = "ApiResource"),
           function(x) {
+              if (length(x) == 0) return(character())
               paste(resourceURL(endpoint(x)),
                     collection.name(x),
                     id(x),
