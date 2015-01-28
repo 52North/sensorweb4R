@@ -45,10 +45,9 @@ names(data) <- sapply(ts, function(x) switch(id(phenomenon(x)), "61102" = "wd", 
 data$date <- times
 
 # filter out invalid values
-data<-data[data[[id(phe.pollutant)]] != -9999.0,]
+data <- data[data[[id(phe.pollutant)]] != -9999.0,]
 
-# i've _no_ idea
-data$wd <- data$wd %% 360
+data$wd <- data$wd/10
 
 # plot it
 pollutionRose(data, pollutant = names(data)[!names(data) %in% c("wd", "ws", "date")])
