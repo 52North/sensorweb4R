@@ -50,7 +50,9 @@ Category <- function(id = character(), label = NULL,
                label = label, service = service))
 }
 
+#' @param x The \linkS4class{Category}.
 #' @rdname api-relations
+#' @aliases service,Category-method
 setMethod("service",
           signature(x = "Category"),
           function(x) x@service)

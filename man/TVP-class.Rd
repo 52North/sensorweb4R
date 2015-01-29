@@ -15,7 +15,7 @@ as.TVP(x)
 TVP(time = character(), value = numeric())
 }
 \description{
-Class to contains the data of a \linkS4class{Timseries} as time value
+Class to contains the data of a \linkS4class{Timeseries} as time value
 pairs.
 }
 \section{Functions}{

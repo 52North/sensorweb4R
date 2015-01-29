@@ -32,7 +32,7 @@ as.parameter.list <- function(x) {
 #' @param category A \linkS4class{Category} or character identifier to filter with.
 #' @param phenomenon A \linkS4class{Phenomenon} or character identifier to filter with.
 #' @param station A \linkS4class{Station} or character identifier to filter with.
-#' @param timespan A \linkS4class{lubridate::interval} or a character vector to filter with.
+#' @param timespan A \linkS4class{Interval} or a character vector to filter with.
 #' @param crs A CRS identifier.
 #' @param bbox A bouding box character vector.
 #' @param near A point character vector.

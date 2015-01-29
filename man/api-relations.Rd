@@ -95,6 +95,9 @@ phenomenon(x)
 
 phenomenon(x) <- value
 }
+\arguments{
+\item{x}{The \linkS4class{Category}.}
+}
 \description{
 #' Common getter and setter for relations between API resources.
 }
