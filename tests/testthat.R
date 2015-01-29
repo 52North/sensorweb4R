@@ -11,9 +11,10 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+
 library(testthat)
 library(sensorweb4R)
-library(futile.logger)
-flog.threshold(DEBUG)
+
+futile.logger::flog.threshold(futile.logger::DEBUG)
 
 test_check("sensorweb4R")

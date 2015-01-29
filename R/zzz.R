@@ -12,23 +12,38 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#' Sensor web for R.
+#' \code{sensorweb4R}: functions and classes to download data from sensor web
+#' services
 #'
-#' @section Package options:
-#' sensorweb4R uses the following \code{\link{options}} to configure behaviour:
+#' @section About: Sensor web services contain timeseries of sensoric data, such
+#'   as temperature and rainfall by weather stations. This package can retrieve
+#'   specific subsets of data, such as specific stations or observed phenomena
+#'   by providin plain R function calls to load these datasets into your session
+#'   as ready-to-use \code{R} data structures.
 #'
-#' \itemize{
-#'   \item \code{sensorweb4R.defaultApiVersion}: default version of API to use
-#'   \item \code{sensorweb4R.defaultLoggerThreshold}: default logger used based on the \code{futile.logger} package, logs to console
-#'   \item \code{sensorweb4R.loggerLayout}: layout string used in \code{futile.logger::flog.layout(..)}
-#' }
+#' @section Documentation: The main documentation for this package can be
+#'   found in the vignette (\code{vignette("sensorweb4R")}) and the demos
+#'   (\code{demo(package = "sensorweb4R")}).
 #'
-#' @section Debugging:
-#' sensorweb4R uses \code{futile.logger} for logging. To increase the log level of this package call \code{flog.threshold("<level>", name = "sensorweb4R")}. For more information about available logging levels or advanced logger configuration, see \code{?futile.logger}.
+#' @section Package options: sensorweb4R uses the following
+#'   \code{\link{options}} to configure behaviour:
+#'
+#'   \itemize{ \item \code{sensorweb4R.loggerLayout}: layout string used in
+#'   \code{futile.logger::flog.layout(..)} }
+#'
+#' @section Debugging: sensorweb4R uses \code{futile.logger} for logging. To
+#'   increase the log level of this package call \code{flog.threshold("<level>",
+#'   name = "sensorweb4R")}. For more information about available logging levels
+#'   or advanced logger configuration, see \code{?futile.logger}.
+#'
+#' @author Christian Autermann, \email{c.autermann@@52north.org}
+#' @author Daniel Nuest, \email{d.nuest@@52north.org}
 #'
 #' @docType package
 #' @name sensorweb4R
 #' @import futile.logger
+#' @keywords ts, spatial
+#' @concept sensorweb, timeseries
 NULL # documenting null to integrate this comment into a specific rd file via @name, see http://r-pkgs.had.co.nz/man.html#dry2
 
 # when you change .onLoad and .onAttach functions, don't forget to call load_all with reset=TRUE !
@@ -36,7 +51,7 @@ NULL # documenting null to integrate this comment into a specific rd file via @n
 .onLoad <- function(libname, pkgname) {
     op <- options()
     op.sensorweb4R <- list(
-        sensorweb4R.defaultApiVersion = "v1",
+        #sensorweb4R.defaultApiVersion = "v1",
         sensorweb4R.loggerLayout = "[~l] [~t] [~n.~f] ~m"
     )
     toset <- !(names(op.sensorweb4R) %in% names(op))
@@ -46,12 +61,9 @@ NULL # documenting null to integrate this comment into a specific rd file via @n
 }
 
 .onAttach <- function(libname, pkgname) {
-    #flog.threshold(options("sensorweb4R.defaultLoggerThreshold"), name = "sensorweb4R")
-    # cannot set via string variable, calling also does not work... call(paste0("flog.threshold(", options("sensorweb4R.defaultLoggerThreshold"), ", name = 'sensorweb4R')"))
     flog.threshold(INFO, name = "sensorweb4R")
     .layout <- layout.format(options("sensorweb4R.loggerLayout"))
     flog.layout(.layout, name =  "sensorweb4R")
-
     packageStartupMessage("Welcome to sensorweb4R! The logging level is ", flog.threshold(), " - set it with 'flog.threshold(<level>, name = \"sensorweb4R\")'")
 }
 

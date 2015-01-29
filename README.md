@@ -44,6 +44,14 @@ vignette("<name of the vignette to open")
 
 Developer documentation is in this file ``README.md``.
 
+## Development
+
+### Building the documentation
+
+```{r}
+roxygen2::roxygenise()
+```
+
 ## Contact / Support
 
 Please direct support questions to the 52°North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).

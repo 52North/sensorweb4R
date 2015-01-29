@@ -1,0 +1,6 @@
+ircel-celine        Basic introduction into sensorweb4R functionality
+timeseries-coercion Coercing to other timeseries classes
+openair             Openair pollution rose demo
+openair2            Openair pollution rose demo
+cache               How to manipulate the request cache
+spatial-coercion    Coercing selected classes to spatial classes

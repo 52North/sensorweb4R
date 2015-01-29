@@ -7,17 +7,56 @@ Authors@R: c( person("Daniel", "Nuest", email = "d.nuest@52north.org", role =
 Description: An R client for the 52\u00b0North Sensor Web Client API
 Depends:
     R (>= 3.1.1)
-License: Apache License (== 2.0)
+License: Apache License (== 2.0) | file LICENSE
 LazyData: true
 URL: https://github.com/52North/sensorweb4R
 BugReports: https://github.com/52North/sensorweb4R/issues
 Imports:
     futile.logger,
     httr,
+    sp,
+    stringi,
+    jsonlite,
+    xts,
+    zoo,
+    stats,
+    lubridate
 Suggests:
     testthat,
     knitr,
     devtools,
     pander,
-    lubridate
+    openair
 VignetteBuilder: knitr
+Collate:
+    'api-endpoints.R'
+    'api-index.R'
+    'cache-functions.R'
+    'generic-methods.R'
+    'virtual-class-http-resource.R'
+    'helper-methods.R'
+    'class-unions.R'
+    'class-endpoint.R'
+    'virtual-class-api-resource.R'
+    'class-service.R'
+    'class-category.R'
+    'virtual-class-domain-resource.R'
+    'class-feature.R'
+    'class-offering.R'
+    'class-phenomenon.R'
+    'class-procedure.R'
+    'class-tvp.R'
+    'class-reference-value.R'
+    'class-station.R'
+    'class-status-interval.R'
+    'class-timeseries.R'
+    'data.frame-methods.R'
+    'distance-matrix.R'
+    'extract-and-replace-methods.R'
+    'parse-methods.R'
+    'query-methods.R'
+    'stations.R'
+    'string-methods.R'
+    'timeseries-coercion.R'
+    'utils.R'
+    'zzz.R'

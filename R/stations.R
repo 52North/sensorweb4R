@@ -42,15 +42,6 @@
     return(json)
 }
 
-.get_json <- function(url, ...) {
-    futile.logger::flog.debug("Requesting %s", url)
-    response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
-    httr::stop_for_status(response)
-    content <- httr::content(response, "text")
-    json <- jsonlite::fromJSON(content)
-    return(json)
-}
-
 #' Request Stations
 #'
 #' Requests station data from the Timeseries API using
@@ -75,7 +66,7 @@ get_stations <- function(endpoint, service=NULL, category=NULL,
     queryParameter <- list(crs = crs, bbox = bbox, near = near,
                            service = service, category = category,
                            phenomenon = phenomenon)
-    json <- .get_json(.stations_url(endpoint), query=queryParameter)
+    json <- get.json(.stations_url(endpoint), query=queryParameter)
     stations <- .geojson_to_spdf(json)
     return(stations)
 }
