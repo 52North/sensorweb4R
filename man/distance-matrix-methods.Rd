@@ -63,7 +63,7 @@ the distance matrix of class \code{dist}
 Methods to calculate distances between \linkS4class{Station}s
 and to find the nearest \code{Station}s.
 
-\code{saveDistanceMatrix} a distance matrix to disk.
+\code{saveDistanceMatrix} saves a distance matrix to disk.
 
 \code{readDistanceMatrix} reads the a distance matrix from disk.
 
