@@ -29,8 +29,6 @@ Suggests:
     openair
 VignetteBuilder: knitr
 Collate:
-    'api-endpoints.R'
-    'api-index.R'
     'cache-functions.R'
     'generic-methods.R'
     'virtual-class-http-resource.R'
@@ -55,7 +53,6 @@ Collate:
     'extract-and-replace-methods.R'
     'parse-methods.R'
     'query-methods.R'
-    'stations.R'
     'string-methods.R'
     'timeseries-coercion.R'
     'utils.R'

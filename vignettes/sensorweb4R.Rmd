@@ -69,7 +69,7 @@ demo("ircel-celine")
 Some konwn API endpoints are build in to start exploring sensor web data on your own:
 
 ```{r}
-sensorweb4R:::sensorweb_api_endpoints()
+sensorweb4R:::example.endpoints()
 ```
 
 ## Terms and Definitions

@@ -3,7 +3,7 @@ NULL
 
 #' Time-Value-Pairs
 #'
-#' Class to contains the data of a \linkS4class{Timseries} as time value
+#' Class to contains the data of a \linkS4class{Timeseries} as time value
 #' pairs.
 #'
 #' @author Christian Autermann \email{c.autermann@@52north.org}

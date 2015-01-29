@@ -113,16 +113,3 @@ has_license_header <- function(pkg = ".", header = "inst/license-header") {
         return(paste0("Success: All files have the license header specified in ", header))
     else return(paste0("Failure: Files missing the header: ", paste0(files_missing_header)))
 }
-
-
-# function is used within many tests
-check_test_api <- function() {
-    .url <- sensorweb_api_endpoints()[[1]]
-    response <- GET(.url)
-
-    if (!url_ok(.url)) {
-        skip(paste0("testing API not available at ", .url))
-    }
-
-    return(.url)
-}

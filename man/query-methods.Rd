@@ -102,7 +102,7 @@ getData(x, ...)
 \S4method{getData}{Timeseries}(x, generalize = FALSE, timespan = NULL, ...)
 }
 \arguments{
-\item{timespan}{A \linkS4class{lubridate::interval} or a character vector to filter with.}
+\item{timespan}{A \linkS4class{Interval} or a character vector to filter with.}
 }
 \description{
 Queries an \linkS4class{Endpoint}.

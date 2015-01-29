@@ -76,7 +76,8 @@ setMethod("[",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Endpoint(url = resourceURL(x)[i])
+                  Endpoint(url = resourceURL(x)[i],
+                           label = label(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
