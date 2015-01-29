@@ -53,7 +53,6 @@ Collate:
     'extract-and-replace-methods.R'
     'parse-methods.R'
     'query-methods.R'
-    'stations.R'
     'string-methods.R'
     'timeseries-coercion.R'
     'utils.R'
