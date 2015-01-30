@@ -12,7 +12,7 @@ is.Endpoint(x)
 
 as.Endpoint(x)
 
-Endpoint(url = character(), ...)
+Endpoint(url = character(), label = NULL, ...)
 }
 \description{
 A class representing a Timeseries API endpoint.
@@ -29,6 +29,8 @@ A class representing a Timeseries API endpoint.
 
 \describe{
 \item{\code{url}}{The URL.}
+
+\item{\code{label}}{A human readable name.}
 }}
 \author{
 Christian Autermann \email{c.autermann@52north.org}

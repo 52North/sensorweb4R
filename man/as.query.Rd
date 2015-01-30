@@ -21,7 +21,7 @@ as.query(service = NULL, category = NULL, phenomenon = NULL, crs = NULL,
 
 \item{near}{A point character vector.}
 
-\item{timespan}{A \linkS4class{lubridate::interval} or a character vector to filter with.}
+\item{timespan}{A \linkS4class{Interval} or a character vector to filter with.}
 
 \item{station}{A \linkS4class{Station} or character identifier to filter with.}
 
