@@ -40,7 +40,8 @@ distanceMatrix(x, ...)
 
 \item{file}{the file to save to or read from}
 
-\item{x}{The object to find the nearest stations for}
+\item{x}{For \code{distanceMatrix}: The object to create a distance matrix for.\cr
+For \code{nearest}: the object to calculate the nearest neighbors for.}
 
 \item{all}{The possible nearest neighbors for \code{x}. For the
 \linkS4class{Station} method, \code{all} can be omitted.
@@ -49,9 +50,6 @@ In that case, \code{all} will default to \code{stations(endpoint(x))}.}
 \item{n}{The number of nearest objects that should be returned.}
 
 \item{dm}{The distance matrix for the objects (generated if missing).}
-
-\item{x}{For \code{distanceMatrix}: The object to create a distance matrix for.\cr
-For \code{nearest}: the object to calculate the nearest neighbors for.}
 }
 \value{
 For \code{nearest}: a subset of \code{all} orderd by their distance
@@ -63,8 +61,8 @@ matrix of class \code{dist}.
 For \code{distnace}: a numeric vector containing the distance in meters.
 }
 \description{
-Methods to calculate distances between \linkS4class{Station}s
-and to find the geographically nearest neighbor(s) between objects.
+Methods to calculate distances between objects and to find the geographically
+nearest neighbor(s) between objects.
 }
 \details{
 \code{nearest} calculates the nearest objects of \code{all} in relation

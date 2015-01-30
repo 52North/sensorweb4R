@@ -33,7 +33,6 @@
 #' returned are meters.
 #'
 #' @param dm The distance matrix.
-#' @param x The object to find the nearest stations for
 #' @param all The possible nearest neighbors for \code{x}. For the
 #'        \linkS4class{Station} method, \code{all} can be omitted.
 #'        In that case, \code{all} will default to \code{stations(endpoint(x))}.
