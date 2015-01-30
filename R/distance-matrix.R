@@ -40,6 +40,9 @@
 #' @param x For \code{distanceMatrix}: The object to create a distance matrix for.\cr
 #'          For \code{nearest}: the object to calculate the nearest neighbors for.
 #' @param n The number of nearest objects that should be returned.
+#' @param filter.fun A function returning a \code{logical} vector to subset
+#'                   \code{all} and to allow only specific elements of \code{all}
+#'                   to be considered for the calculation.
 #' @param file the file to save to or read from
 #'
 #' @return
@@ -94,31 +97,64 @@ DistanceStation <- function(station, distance) {
 distance.DistanceStation <- function(x)
     x@distance
 
-nearest.Station <- function(x, all, dm = NULL, n = 1, ...) {
+nearest.Station <- function(x, all, dm = NULL, n = 1, filter.fun = NULL, ...) {
 
-    if (missing(all)) {
+    if (missing(all))
         all <- stations(endpoint(x))
-    }
-
-    if (is.null(dm)) {
+    if (!id(x) %in% id(all))
+        stop("x is not part of all")
+    if (is.null(dm))
         dm <- distanceMatrix(all)
-    }
     if (n <= 0) {
         warning('n <= 0. Setting n to 1')
         n <- 1
     }
-    if (n > length(all) - 1) {
-        warning('n greater than number of stations. Setting to length(all)-1')
-        n <- length(all) - 1
-    }
 
     dm <- as.matrix(dm)
+
+    if (dim(dm)[1] != length(all))
+        stop("Incompatible dimensions of all and dm")
+
     # the index of the station
     idx <- match(id(x), id(all))
-    # the top n nearest indices
-    top <- as.integer(names(sort(dm[idx,])[seq(2, n + 1)]))
 
-    DistanceStation(all[top], dm[idx,top])
+    if (missing(filter.fun)) {
+        if (n > length(all) - 1) {
+            warning('n greater than number of stations')
+            n <- length(all) - 1
+        }
+        # all stations are possible candidates
+        idx.filter <- seq_len(length(all))
+    } else {
+        filter.fun <- match.fun(filter.fun)
+        all.filtered <- all[filter.fun(all)]
+
+        # limited candidates..
+        idx.filter <- match(id(all.filtered), id(all))
+
+        if (idx %in% idx.filter) {
+            if (n > length(idx.filter) - 1) {
+                warning('n greater than number of stations')
+                n <- length(idx.filter) - 1
+            }
+        } else {
+            if (n > length(idx.filter)) {
+                warning('n greater than number of stations')
+                n <- length(idx.filter)
+            }
+            # include x to have at least on result
+            idx.filter <- c(idx, idx.filter)
+        }
+    }
+
+    # indices orderd by distance
+    top <- as.integer(names(sort(dm[idx,][idx.filter])))
+
+    # the top n nearest indices
+    top <- top[seq(2, n + 1)]
+
+
+    DistanceStation(all[top], dm[idx, top])
 }
 
 

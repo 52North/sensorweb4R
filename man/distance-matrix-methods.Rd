@@ -25,9 +25,11 @@ distance(x)
 
 nearest(x, all, dm = NULL, n = 1, ...)
 
-\S4method{nearest}{Station,Station}(x, all, dm = NULL, n = 1, ...)
+\S4method{nearest}{Station,Station}(x, all, dm = NULL, n = 1,
+  filter.fun = NULL, ...)
 
-\S4method{nearest}{Station,missing}(x, all, dm = NULL, n = 1, ...)
+\S4method{nearest}{Station,missing}(x, all, dm = NULL, n = 1,
+  filter.fun = NULL, ...)
 
 distanceMatrix(x, ...)
 
@@ -48,6 +50,10 @@ For \code{nearest}: the object to calculate the nearest neighbors for.}
 In that case, \code{all} will default to \code{stations(endpoint(x))}.}
 
 \item{n}{The number of nearest objects that should be returned.}
+
+\item{filter.fun}{A function returning a \code{logical} vector to subset
+\code{all} and to allow only specific elements of \code{all}
+to be considered for the calculation.}
 
 \item{dm}{The distance matrix for the objects (generated if missing).}
 }
