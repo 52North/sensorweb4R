@@ -54,7 +54,7 @@ Developer documentation is in this file ``README.md``.
 ### Building the documentation
 
 ```{r}
-roxygen2::roxygenise()
+devtools::document()
 ```
 
 ## Contact / Support
