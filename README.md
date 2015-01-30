@@ -8,6 +8,11 @@ R extension package to integrate sensor data into R using the [52°North Sensor 
 
 The sensorweb4R package is not on CRAN yet, so please download and install the package manually. The first option is using the package ``devtools``, which also works well for your own fork or development versions by other contributors.
 
+So, if you don't have ``devtools`` installed:
+```
+install.packages("devtools")
+```
+Continue:
 ```
 require(devtools)
 devtools::install_github("52North/sensorweb4R")
