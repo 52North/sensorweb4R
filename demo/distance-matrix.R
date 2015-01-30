@@ -13,7 +13,7 @@ sta.all <- stations(endpoint)
 station <- sample(sta.all, 1)
 
 
-sta.near <- nearestStations(station, stations = sta.all, n = 5)
+sta.near <- nearest(station, all = sta.all, n = 5)
 
 distance(sta.near)
 

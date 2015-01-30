@@ -16,6 +16,7 @@
 NULL
 
 #' @export
+#' @method as.character ApiResource
 #' @rdname string-methods
 as.character.ApiResource <- function(x, ...) if (length(x) == 0) paste0(class(x),"()") else id(x)
 setAs("ApiResource", "character", function(from) as.character.ApiResource(from))
