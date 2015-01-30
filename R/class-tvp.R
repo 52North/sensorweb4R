@@ -80,3 +80,8 @@ setAs("TVP", "numeric", function(from) value(from))
 #' @export
 as.POSIXct.TVP <- function(x, ...) time(x)
 setAs("TVP", "POSIXct", function(from) time(from))
+
+setMethod("Compare",
+          signature("TVP", "TVP") ,
+          function(e1, e2) callGeneric(time(e1), time(e2)))
+
