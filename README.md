@@ -45,7 +45,7 @@ install.packages("rgdal")
 ```
 On Fedora/RedHat/CentOS you will need the following yum packages to be able to install ```rgdal```:
 ```
-yum install gdal gdal-devel gdal-static proj-epsg
+yum install gdal gdal-devel gdal-static proj-devel proj-epsg
 ```
 
 Futher user documentation is in the R help and the vignettes:
