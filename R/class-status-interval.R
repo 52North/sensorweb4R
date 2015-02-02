@@ -1,7 +1,12 @@
 #' @include generic-methods.R
 NULL
 
+#' StatusInterval
+#'
+#' @author Christian Autermann \email{c.autermann@@52north.org}
 #' @export
+#' @rdname StatusInterval-class
+#' @name StatusInterval-class
 setClass("StatusInterval",
          slots = list(lower = "numeric",
                       upper = "numeric",
@@ -16,14 +21,18 @@ setClass("StatusInterval",
          })
 
 #' @export
+#' @describeIn StatusInterval-class Checks whether \code{x} is a \code{StatusInterval}.
 is.StatusInterval <- function(x) is(x, "StatusInterval")
+
 #' @export
+#' @describeIn StatusInterval-class Coerces \code{x} into a \code{StatusInterval}.
 as.StatusInterval <- function(x) as(x, "StatusInterval")
 
 setClassUnion("StatusInterval_or_NULL",
               c("StatusInterval", "NULL"))
 
 #' @export
+#' @describeIn StatusInterval-class Constructs a new \code{StatusInterval}.
 StatusInterval <- function(name = character(), lower = NULL,
                            upper = NULL, color = NULL) {
     name <- as.character(name)
@@ -35,43 +44,51 @@ StatusInterval <- function(name = character(), lower = NULL,
                color = color, name = name))
 }
 
-#' @export
-length.StatusInterval <- function(x) length(name(x))
-
+#' @rdname accessor-methods
 setMethod("lower",
           signature(x = "StatusInterval"),
           function(x) x@lower)
+
+#' @rdname accessor-methods
 setMethod("lower<-",
           signature(x = "StatusInterval",
                     value = "numeric_or_NULL"),
           function(x, value)
               x@lower <- stretch(length(x), lower, NA, as.numeric))
 
+#' @rdname accessor-methods
 setMethod("upper",
           signature(x = "StatusInterval"),
           function(x) x@upper)
+
+#' @rdname accessor-methods
 setMethod("upper<-",
           signature(x = "StatusInterval",
                     value = "numeric_or_NULL"),
           function(x, value)
               x@upper <- stretch(length(x), upper, NA, as.numeric))
 
+#' @rdname accessor-methods
 setMethod("color",
           signature(x = "StatusInterval"),
           function(x) x@color)
+
+#' @rdname accessor-methods
 setMethod("color<-",
           signature(x = "StatusInterval",
                     value = "character_or_NULL"),
           function(x, value)
               x@color <- stretch(length(x), color, NA, as.character))
 
+#' @rdname accessor-methods
 setMethod("name",
           signature(x = "StatusInterval"),
           function(x) x@name)
 
+#' @rdname length-methods
 setMethod("length",
           signature(x = "StatusInterval"),
-          length.StatusInterval)
+          function(x) length(name(x)))
 
 rbind2.StatusInterval <- function(x, y)  {
     x <- as.StatusInterval(x)
@@ -81,15 +98,22 @@ rbind2.StatusInterval <- function(x, y)  {
                    color = c(color(x), color(y)),
                    name = c(name(x), name(y)))
 }
+
+setAs("list", "StatusInterval", function(from) concat.list(from))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("StatusInterval", "StatusInterval"),
           function(x, y) rbind2.StatusInterval(x, y))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("StatusInterval", "ANY"),
           function(x, y) rbind2.StatusInterval(x, as.StatusInterval(y)))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("ANY", "StatusInterval"),
           function(x, y) rbind2.StatusInterval(as.StatusInterval(x), y))
-setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) rbind2.StatusInterval(as.StatusInterval(x),
-                                                    as.StatusInterval(y)))
+
+#' @rdname rep-methods
 setMethod("rep", signature(x = "StatusInterval"),
           function(x, ...)
               StatusInterval(lower = rep(lower(x), ...),

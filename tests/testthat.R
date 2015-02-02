@@ -17,4 +17,13 @@ library(sensorweb4R)
 
 futile.logger::flog.threshold(futile.logger::DEBUG)
 
+
+check_test_api <- function() {
+    endpoint <- example.endpoints()[1]
+    url <- resourceURL(endpoint)
+    if (!url_ok(url))
+        skip(paste("testing API not available at", url))
+    endpoint
+}
+
 test_check("sensorweb4R")

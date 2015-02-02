@@ -9,6 +9,14 @@
 #' @include class-tvp.R
 NULL
 
+#' Timeseries
+#'
+#' Represents a timeseries.
+#'
+#' @family API Resources
+#' @author Christian Autermann \email{c.autermann@@52north.org}
+#' @rdname Timeseries-class
+#' @name Timeseries-class
 #' @export
 setClass("Timeseries",
          contains = "ApiResource",
@@ -42,8 +50,10 @@ setClass("Timeseries",
          })
 
 #' @export
+#' @describeIn Timeseries-class Checks whether \code{x} is a \code{Timeseries}.
 is.Timeseries <- function(x) is(x, "Timeseries")
 #' @export
+#' @describeIn Timeseries-class Coerces \code{x} into a \code{Timeseries}.
 as.Timeseries <- function(x) as(x, "Timeseries")
 
 setClassUnion("Timeseries_or_characters",
@@ -93,6 +103,7 @@ create.ReferenceValues <- function(len, x) {
 }
 
 #' @export
+#' @describeIn Timeseries-class Constructs a new \code{Timeseries}.
 Timeseries <- function(id = character(), label = NULL, uom = NULL, endpoint = NULL,
                        phenomenon = NULL, service = NULL, feature = NULL, offering = NULL,
                        procedure = NULL, category = NULL, station = NULL, statusIntervals = NULL,
@@ -133,10 +144,12 @@ Timeseries <- function(id = character(), label = NULL, uom = NULL, endpoint = NU
                lastValue = lastValue))
 }
 
+#' @rdname accessor-methods
 setMethod("referenceValues",
           signature(x = "Timeseries"),
           function(x) x@referenceValues)
 
+#' @rdname accessor-methods
 setMethod("referenceValues<-",
           signature(x = "Timeseries",
                     value = "ReferenceValue_or_NULL"),
@@ -145,10 +158,12 @@ setMethod("referenceValues<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("service",
           signature(x = "Timeseries"),
           function(x) x@service)
 
+#' @rdname api-relations
 setMethod("service<-",
           signature(x = "Timeseries",
                     value = "Service_or_NULL"),
@@ -157,10 +172,12 @@ setMethod("service<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("feature",
           signature(x = "Timeseries"),
           function(x) x@feature)
 
+#' @rdname api-relations
 setMethod("feature<-",
           signature(x = "Timeseries",
                     value = "Feature_or_NULL"),
@@ -169,10 +186,12 @@ setMethod("feature<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("offering",
           signature(x = "Timeseries"),
           function(x) x@offering)
 
+#' @rdname api-relations
 setMethod("offering<-",
           signature(x = "Timeseries",
                     value = "Offering_or_NULL"),
@@ -181,10 +200,12 @@ setMethod("offering<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("category",
           signature(x = "Timeseries"),
           function(x) x@category)
 
+#' @rdname api-relations
 setMethod("category<-",
           signature(x = "Timeseries",
                     value = "Category_or_NULL"),
@@ -193,10 +214,12 @@ setMethod("category<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("procedure",
           signature(x = "Timeseries"),
           function(x) x@procedure)
 
+#' @rdname api-relations
 setMethod("procedure<-",
           signature(x = "Timeseries",
                     value = "Procedure_or_NULL"),
@@ -205,10 +228,12 @@ setMethod("procedure<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("station",
           signature(x = "Timeseries"),
           function(x) x@station)
 
+#' @rdname api-relations
 setMethod("station<-",
           signature(x = "Timeseries",
                     value = "Station_or_NULL"),
@@ -217,10 +242,12 @@ setMethod("station<-",
               invisible(x)
           })
 
+#' @rdname accessor-methods
 setMethod("uom",
           signature(x = "Timeseries"),
           function(x) x@uom)
 
+#' @rdname accessor-methods
 setMethod("uom<-",
           signature(x = "Timeseries",
                     value = "character_or_NULL"),
@@ -229,10 +256,12 @@ setMethod("uom<-",
               invisible(x)
           })
 
+#' @rdname api-relations
 setMethod("phenomenon",
           signature(x = "Timeseries"),
           function(x) x@phenomenon)
 
+#' @rdname api-relations
 setMethod("phenomenon<-",
           signature(x = "Timeseries",
                     value = "Phenomenon_or_NULL"),
@@ -241,10 +270,12 @@ setMethod("phenomenon<-",
               invisible(x)
           })
 
+#' @rdname accessor-methods
 setMethod("firstValue",
           signature(x = "Timeseries"),
           function(x) x@firstValue)
 
+#' @rdname accessor-methods
 setMethod("firstValue<-",
           signature(x = "Timeseries",
                     value = "TVP_or_NULL"),
@@ -253,10 +284,12 @@ setMethod("firstValue<-",
               x
           })
 
+#' @rdname accessor-methods
 setMethod("lastValue",
           signature(x = "Timeseries"),
           function(x) x@lastValue)
 
+#' @rdname accessor-methods
 setMethod("lastValue<-",
           signature(x = "Timeseries",
                     value = "TVP_or_NULL"),
@@ -265,16 +298,18 @@ setMethod("lastValue<-",
               x
           })
 
+#' @rdname accessor-methods
 setMethod("statusIntervals",
           signature(x = "Timeseries"),
           function(x) x@statusIntervals)
 
+#' @rdname url-methods
 setMethod("getDataURL",
           signature(x = "Timeseries"),
           function(x) subresourceURL(x, "getData"))
 
 setAs("character", "Timeseries", function(from) Timeseries(id = from))
-
+setAs("list", "Timeseries", function(from) concat.list(from))
 
 rbind2.Timeseries <- function(x, y) {
     x <- as.Timeseries(x)
@@ -296,16 +331,20 @@ rbind2.Timeseries <- function(x, y) {
                statusIntervals = c(statusIntervals(x), statusIntervals(y)),
                lastValue = rbind2(lastValue(x), lastValue(y)))
 }
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("Timeseries", "Timeseries"),
           function(x, y) rbind2.Timeseries(x, y))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("Timeseries", "ANY"),
           function(x, y) rbind2.Timeseries(x, as.Timeseries(y)))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("ANY", "Timeseries"),
           function(x, y) rbind2.Timeseries(as.Timeseries(x), y))
-setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) rbind2.Timeseries(as.Timeseries(x),
-                                           as.Timeseries(y)))
 
+#' @rdname rep-methods
 setMethod("rep", signature(x = "Timeseries"), function(x, ...)
     Timeseries(endpoint = rep(endpoint(x), ...),
                id = rep(id(x), ...),

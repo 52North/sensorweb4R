@@ -9,6 +9,7 @@
 #' @include class-tvp.R
 NULL
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "Category",
                     i = "ANY",
@@ -23,6 +24,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "Category",
                     i = "ANY",
@@ -36,6 +38,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "DomainResource",
                     i = "ANY",
@@ -52,6 +55,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "DomainResource",
                     i = "ANY",
@@ -65,17 +69,20 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "Endpoint",
                     i = "ANY",
                     j = "missing"),
           function(x, i, j, ...) {
               if(is.numeric(i) || is.logical(i)) {
-                  Endpoint(url = resourceURL(x)[i])
+                  Endpoint(url = resourceURL(x)[i],
+                           label = label(x)[i])
               } else
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "Endpoint",
                     i = "ANY",
@@ -90,6 +97,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "ReferenceValue",
                     i = "ANY",
@@ -105,6 +113,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "ReferenceValue",
                     i = "ANY",
@@ -119,6 +128,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "Service",
                     i = "ANY",
@@ -137,6 +147,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "Service",
                     i = "ANY",
@@ -151,6 +162,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "Station",
                     i = "ANY",
@@ -165,6 +177,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "Station",
                     i = "ANY",
@@ -179,6 +192,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "StatusInterval",
                     i = "ANY",
@@ -190,6 +204,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "StatusInterval",
                     i = "ANY",
@@ -204,6 +219,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "Timeseries",
                     i = "ANY",
@@ -228,6 +244,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "Timeseries",
                     i = "ANY",
@@ -242,6 +259,7 @@ setMethod("[<-",
               }
           })
 
+#' @rdname subset-methods
 setMethod("[",
           signature(x = "TVP",
                     i = "ANY",
@@ -254,6 +272,7 @@ setMethod("[",
                   stop("Indexing only supported with numeric or logical values!")
           })
 
+#' @rdname subset-methods
 setMethod("[<-",
           signature(x = "TVP",
                     i = "ANY",

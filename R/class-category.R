@@ -1,11 +1,16 @@
-
 #' @include generic-methods.R
 #' @include helper-methods.R
 #' @include virtual-class-api-resource.R
 #' @include class-service.R
 NULL
 
+#' Category
+#'
+#' @family API Resources
+#' @author Christian Autermann \email{c.autermann@@52north.org}
 #' @export
+#' @name Category-class
+#' @rdname Category-class
 setClass("Category",
          contains = "ApiResource",
          slots = list(service = "Service"),
@@ -16,9 +21,13 @@ setClass("Category",
          })
 
 #' @export
+#' @describeIn Category-class Checks whether \code{x} is a \code{Category}.
 is.Category <- function(x) is(x, "Category")
+
 #' @export
+#' @describeIn Category-class Coerces \code{x} into a \code{Category}.
 as.Category <- function(x) as(x, "Category")
+
 #' @export
 rbind.Category <- concat
 
@@ -29,6 +38,7 @@ setClassUnion("Category_or_NULL",
               c("Category", "NULL"))
 
 #' @export
+#' @describeIn Category-class Creates a new \code{Category}.
 Category <- function(id = character(), label = NULL,
                      endpoint = NULL, service = NULL) {
     id <- as.character(id)
@@ -40,10 +50,14 @@ Category <- function(id = character(), label = NULL,
                label = label, service = service))
 }
 
+#' @param x The \linkS4class{Category}.
+#' @rdname api-relations
+#' @aliases service,Category-method
 setMethod("service",
           signature(x = "Category"),
           function(x) x@service)
 
+#' @rdname api-relations
 setMethod("service<-",
           signature(x = "Category",
                     value = "Service_or_NULL"),
@@ -53,7 +67,7 @@ setMethod("service<-",
           })
 
 setAs("character", "Category", function(from) Category(id = from))
-
+setAs("list", "Category", function(from) concat.list(from))
 
 rbind2.Category <- function(x, y) {
     x <- as.Category(x)
@@ -63,15 +77,20 @@ rbind2.Category <- function(x, y) {
              label = c(label(x), label(y)),
              service = rbind2(service(x), service(y)))
 }
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("Category", "Category"),
           function(x, y) rbind2.Category(x, y))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("Category", "ANY"),
           function(x, y) rbind2.Category(x, as.Category(y)))
+
+#' @rdname rbind2-methods
 setMethod("rbind2", signature("ANY", "Category"),
           function(x, y) rbind2.Category(as.Category(x), y))
-setMethod("rbind2", signature("ANY", "ANY"),
-          function(x, y) rbind2.Category(as.Category(x),
-                                         as.Category(y)))
+
+#' @rdname rep-methods
 setMethod("rep", signature(x = "Category"),
           function(x, ...)
               Category(endpoint = rep(endpoint(x), ...),
