@@ -109,6 +109,10 @@ setMethod("endpoint<-",
               invisible(x)
           })
 
+setMethod("Compare",
+          signature("ApiResource", "ApiResource") ,
+          function(e1, e2) callGeneric(id(e1), id(e2)))
+
 collection.name <- function(x) {
     switch(class(x),
            Service = "services",
