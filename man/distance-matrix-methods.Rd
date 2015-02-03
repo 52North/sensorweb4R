@@ -8,8 +8,9 @@
 \alias{distanceMatrix}
 \alias{distanceMatrix,SpatialPoints-method}
 \alias{distanceMatrix,Station-method}
-\alias{nearestStations}
-\alias{nearestStations,Station-method}
+\alias{nearest}
+\alias{nearest,Station,Station-method}
+\alias{nearest,Station,missing-method}
 \alias{readDistanceMatrix}
 \alias{saveDistanceMatrix}
 \title{Distance matrix methods}
@@ -18,66 +19,82 @@ saveDistanceMatrix(dm, file)
 
 readDistanceMatrix(file)
 
-nearestStations(x, ...)
-
-distanceMatrix(x, ...)
-
 distance(x)
 
-\S4method{nearestStations}{Station}(x, stations = NULL, dm = NULL, n = 1,
-  ...)
-
 \S4method{distance}{DistanceStation}(x)
+
+nearest(x, all, dm = NULL, n = 1, ...)
+
+\S4method{nearest}{Station,Station}(x, all, dm = NULL, n = 1,
+  filter.fun = NULL, ...)
+
+\S4method{nearest}{Station,missing}(x, all, dm = NULL, n = 1,
+  filter.fun = NULL, ...)
+
+distanceMatrix(x, ...)
 
 \S4method{distanceMatrix}{SpatialPoints}(x, ...)
 
 \S4method{distanceMatrix}{Station}(x, ...)
 }
 \arguments{
-\item{dm}{the distance matrix}
+\item{dm}{The distance matrix.}
 
-\item{file}{the file name}
+\item{file}{the file to save to or read from}
 
-\item{x}{the object to find the nearest stations for}
+\item{x}{For \code{distanceMatrix}: The object to create a distance matrix for.\cr
+For \code{nearest}: the object to calculate the nearest neighbors for.}
 
-\item{stations}{the \linkS4class{Station}s for the distance
-calculation (requested if \code{NULL})}
+\item{all}{The possible nearest neighbors for \code{x}. For the
+\linkS4class{Station} method, \code{all} can be omitted.
+In that case, \code{all} will default to \code{stations(endpoint(x))}.}
 
-\item{n}{the number of stations that should be returned}
+\item{n}{The number of nearest objects that should be returned.}
 
-\item{file}{the file name}
+\item{filter.fun}{A function returning a \code{logical} vector to subset
+\code{all} and to allow only specific elements of \code{all}
+to be considered for the calculation.}
 
-\item{x}{The object to create a distance matrix for.}
-
-\item{dm}{the distance matrix for the stations (generated
-if \code{NULL})}
+\item{dm}{The distance matrix for the objects (generated if missing).}
 }
 \value{
-a subset of \code{stations} orderd by their distance
-         to \code{x}, enriched with an additional
-         \code{distance} attribute
+For \code{nearest}: a subset of \code{all} orderd by their distance
+to \code{x}, enriched with an additional distance attribute.
 
-the distance matrix of class \code{dist}
+For \code{distanceMatrix} and \code{readDistanceMatrix}: a distance
+matrix of class \code{dist}.
+
+For \code{distnace}: a numeric vector containing the distance in meters.
 }
 \description{
-Methods to calculate distances between \linkS4class{Station}s
-and to find the nearest \code{Station}s.
+Methods to calculate distances between objects and to find the geographically
+nearest neighbor(s) between objects.
+}
+\details{
+\code{nearest} calculates the nearest objects of \code{all} in relation
+to \code{x}. The distance matrix can be supplied using the \code{dm}
+parameter and can be calculated using \code{distanceMatrix}. As this
+computation is quite expensive the distance matrix can be saved and read
+using \code{saveDistanceMatrix} and \code{readDistanceMatrix}.
 
-\code{saveDistanceMatrix} saves a distance matrix to disk.
+\code{nearest} returns the same class or a subclass of \code{all}. The
+returned vector or vectorized object is sorted by their distance to
+\code{x}. Additionally the distance can be obtained using \code{distance}.
 
-\code{readDistanceMatrix} reads the a distance matrix from disk.
-
-\code{nearestStations} gets the \code{n} stations nearest
-to \code{station}.
-
-\code{distanceMatrix} creates a distance matrix for the supplied object.
+The distance is calculated using computations on an ellipsoid and the
+returned are meters.
 }
 \examples{
+endpoint <- example.endpoints()[2]
+sta.all <- stations(endpoint)
+station <- sample(sta.all, 1)
+dm <- distanceMatrix(sta.all)
+sta.near <- nearest(station, stations = sta.all, dm = dm, n = 5)
+distance(sta.near)
 \dontrun{
 saveDistanceMatrix(dm, 'distance_matrix.rds')
-}
-\dontrun{
-dm <- readDistanceMatrix('distance_matrix.rds')
+sta.near <- nearest(station, stations = sta.all,
+                    dm = readDistanceMatrix('distance_matrix.rds'))
 }
 }
 
