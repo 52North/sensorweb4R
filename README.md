@@ -41,6 +41,7 @@ For some of the demo's you will need:
 
 ```
 install.packages("maptools")
+install.packages("mapdata")
 install.packages("rgdal")
 ```
 On Fedora/RedHat/CentOS you will need the following yum packages to be able to install ```rgdal```:
