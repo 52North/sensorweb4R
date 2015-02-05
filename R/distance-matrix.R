@@ -30,7 +30,7 @@
 #' \code{x}. Additionally the distance can be obtained using \code{distance}.
 #'
 #' The distance is calculated using computations on an ellipsoid and the
-#' returned are meters.
+#' returned value is in meters.
 #'
 #' @param dm The distance matrix.
 #' @param all The possible nearest neighbors for \code{x}. For the
@@ -52,7 +52,7 @@
 #' For \code{distanceMatrix} and \code{readDistanceMatrix}: a distance
 #' matrix of class \code{dist}.
 #'
-#' For \code{distnace}: a numeric vector containing the distance in meters.
+#' For \code{distance}: a numeric vector containing the distance in meters.
 #'
 #' @examples
 #' endpoint <- example.endpoints()[2]
