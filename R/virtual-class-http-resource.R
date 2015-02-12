@@ -24,3 +24,7 @@ setMethod("subresourceURL",
           function(x, ...) {
               paste(resourceURL(x), ..., sep = "/")
           })
+
+setMethod("Compare",
+          signature("HttpResource", "HttpResource") ,
+          function(e1, e2) callGeneric(resourceURL(e1), resourceURL(e2)))
