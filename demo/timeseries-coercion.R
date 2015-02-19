@@ -28,8 +28,8 @@ data <- getData(ts)[[1]]
 x <- as.xts(data)
 
 xlab <- "Time"
-ylab <- paste0(label(phenomenon(ts)), " (", uom(ts), ")")
-main <- label(ts)
+ylab <- paste0(names(phenomenon(ts)), " (", uom(ts), ")")
+main <- names(ts)
 
 # plot the data
 plot(x, main = main, xlab = xlab, ylab = ylab)

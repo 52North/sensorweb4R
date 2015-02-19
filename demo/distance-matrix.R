@@ -3,7 +3,7 @@ require(maps)
 require(mapdata)
 require(maptools)
 require(rgdal)
-library(sensorweb4R)
+require(sensorweb4R)
 
 data(worldHiresMapEnv)
 
