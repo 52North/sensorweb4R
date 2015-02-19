@@ -53,6 +53,8 @@ data$date <- times
 
 # filter out invalid values
 data <- data[data[[id(phe.pollutant)]] != -9999.0,]
+data <- data[data[["wd"]] != -9999.0,]
+data <- data[data[["ws"]] != -9999.0,]
 
 data$wd <- data$wd/10
 
