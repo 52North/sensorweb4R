@@ -51,7 +51,7 @@ Futher user documentation is in the R help and the vignettes:
 
 ```r
 vignette(package = "sensorweb4R")
-vignette("<name of the vignette to open")
+vignette("<name of the vignette to open>")
 ```
 
 ### Developers 
