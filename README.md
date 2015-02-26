@@ -52,6 +52,12 @@ vignette(package = "sensorweb4R")
 vignette("<name of the vignette to open>")
 ```
 
+When installed from source or GitHub, run the command [Rd2pdf](http://cran.r-project.org/doc/manuals/R-exts.html#index-R-CMD-Rd2pdf) in the parent directory of the package to create the reference manual, which describes all functions in the package:
+
+```
+R CMD Rd2pdf sensorweb4R
+```
+
 ## Development
 
 ### Building the documentation
