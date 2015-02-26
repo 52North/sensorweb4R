@@ -1,5 +1,5 @@
 ---
-title: "sensorweb4R: Accessing Sensor Web Serverices from R"
+title: "sensorweb4R: Accessing Sensor Web Services from R"
 author:
     - Daniel Nuest
     - Chrisitan Autermann

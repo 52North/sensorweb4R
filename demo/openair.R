@@ -39,7 +39,7 @@ time <- strptime(c("2015-01-01T00:00:00Z",
                    "2015-01-31T23:59:59Z"),
                  "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
 
-data <- getData(ts, timespan = new_interval(time[1], time[2]))
+data <- getData(ts, timespan = lubridate::new_interval(time[1], time[2]))
 
 # filter out measurements with partial data
 # and convert the data to a data.frame
