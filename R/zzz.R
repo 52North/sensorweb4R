@@ -44,6 +44,7 @@
 #' @import futile.logger
 #' @keywords ts, spatial
 #' @concept sensorweb, timeseries
+#' @import methods
 NULL # documenting null to integrate this comment into a specific rd file via @name, see http://r-pkgs.had.co.nz/man.html#dry2
 
 # when you change .onLoad and .onAttach functions, don't forget to call load_all with reset=TRUE !

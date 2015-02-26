@@ -31,7 +31,7 @@ license_header <- function(pkg = ".", header = "inst/license-header", add = FALS
         stop("devtools required to run license_header(). Please install.", call. = FALSE)
     }
 
-    files <- devtools::find_code(devtools:::as.package(pkg))
+    files <- devtools:::find_code(devtools::as.package(pkg))
     flog.debug("Checking license headers of %s files using '%s', adding if missing = %s", length(files), header, add)
 
     .result <- .addLicenseHeaderToFiles(files, header, add)
@@ -80,7 +80,7 @@ has_license_header <- function(pkg = ".", header = "inst/license-header") {
 
     files_missing_header <- list()
 
-    headerConn <- file(file.path(devtools:::as.package(".")$path, header), 'r+')
+    headerConn <- file(file.path(devtools::as.package(".")$path, header), 'r+')
     header_content <- readLines(headerConn)
     close(headerConn)
     flog.trace("Header: %s", paste(header_content, sep = "", collapse = ""))

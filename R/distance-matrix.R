@@ -194,7 +194,6 @@ setGeneric("distanceMatrix", function(x, ...)
 setMethod("distanceMatrix",
           signature(x = "SpatialPoints"),
           function(x, ...) {
-              require(geosphere)
               n <- length(x)
               dm <- matrix(0, ncol=n, nrow=n)
               for (i in 1:n) {

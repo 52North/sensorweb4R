@@ -1,10 +1,12 @@
 Package: sensorweb4R
 Title: Connect R to the Sensor Web Client API for downloading timeseries data.
 Version: 0.1
+Encoding: UTF-8
 Authors@R: c( person("Daniel", "Nuest", email = "d.nuest@52north.org", role =
+    c("aut")), person("Christian", "Autermann", email = "c.autermann@52north.org", role =
     c("aut", "cre")), person("52\u00b0North", email = "info@52north.org", role
     = c("cph"), comment = "This package is part of a managed codebase.") )
-Description: An R client for the 52\u00b0North Sensor Web Client API
+Description: An R client for the 52North Sensor Web Client API
 Depends:
     R (>= 3.1.1)
 License: Apache License (== 2.0) | file LICENSE
@@ -12,6 +14,7 @@ LazyData: true
 URL: https://github.com/52North/sensorweb4R
 BugReports: https://github.com/52North/sensorweb4R/issues
 Imports:
+    methods,
     futile.logger,
     httr,
     sp,
