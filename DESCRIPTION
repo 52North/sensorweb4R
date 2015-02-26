@@ -20,9 +20,11 @@ Imports:
     xts,
     zoo,
     stats,
-    lubridate
+    lubridate,
+    geosphere
 Suggests:
     testthat,
+    rmarkdown,
     knitr,
     devtools,
     pander,

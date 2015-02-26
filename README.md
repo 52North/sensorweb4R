@@ -26,8 +26,6 @@ R CMD INSTALL sensorweb4R
 
 ## Documentation
 
-### Users
-
 Take a look at the demos to see how to use the package:
 
 ```r
@@ -41,7 +39,7 @@ For some of the demo's you will need:
 install.packages("maptools")
 install.packages("rgdal")
 ```
-On Fedora/RedHat/CentOS you will need the following yum packages to be able to install ```rgdal```:
+On Fedora/RedHat/CentOS you will need the following yum packages to be able to install `rgdal`:
 
 ```shell
 yum install gdal gdal-devel gdal-static proj-devel proj-epsg
@@ -53,10 +51,6 @@ Futher user documentation is in the R help and the vignettes:
 vignette(package = "sensorweb4R")
 vignette("<name of the vignette to open>")
 ```
-
-### Developers 
-
-Developer documentation is in this file ``README.md``.
 
 ## Development
 
