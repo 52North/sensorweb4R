@@ -4,13 +4,13 @@
 #' @export
 #' @import zoo
 as.zoo.TVP <- function(x, ...) {
-   zoo(value(x), order.by = time(x))
+   zoo::zoo(value(x), order.by = time(x))
 }
 
 #' @export
 #' @import xts
 as.xts.TVP <- function(x, ...) {
-    xts(value(x), order.by = time(x))
+    xts::xts(value(x), order.by = time(x))
 }
 
 #' @export

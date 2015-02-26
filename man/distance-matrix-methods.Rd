@@ -64,7 +64,7 @@ to \code{x}, enriched with an additional distance attribute.
 For \code{distanceMatrix} and \code{readDistanceMatrix}: a distance
 matrix of class \code{dist}.
 
-For \code{distnace}: a numeric vector containing the distance in meters.
+For \code{distance}: a numeric vector containing the distance in meters.
 }
 \description{
 Methods to calculate distances between objects and to find the geographically
@@ -82,7 +82,7 @@ returned vector or vectorized object is sorted by their distance to
 \code{x}. Additionally the distance can be obtained using \code{distance}.
 
 The distance is calculated using computations on an ellipsoid and the
-returned are meters.
+returned value is in meters.
 }
 \examples{
 endpoint <- example.endpoints()[2]
