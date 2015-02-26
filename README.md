@@ -16,6 +16,10 @@ Continue:
 ```r
 devtools::install_github("52North/sensorweb4R")
 ```
+To also install the vignettes run:
+```r
+devtools::install_github("52North/sensorweb4R", build_vignettes = TRUE)
+```
 
 Alternatively, you can download the source code and install the package from source. For this to work must have both [git](http://git-scm.com/downloads) and R (see documentation [here](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#Rcmd-is-not-found-in-my-PATH_0021) for Windows) on your path. Then run the following commands:
 
