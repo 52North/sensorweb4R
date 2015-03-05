@@ -49,11 +49,28 @@ On Fedora/RedHat/CentOS you will need the following yum packages to be able to i
 yum install gdal gdal-devel gdal-static proj-devel proj-epsg
 ```
 
+On Mac OS X you will need GDAL e.g. precompiled from [here](http://www.kyngchaos.com/software/frameworks).
+Depending on the version of the OS, you will probably not find a suitable `rgdal` in CRAN. To install manually:
+- download "package source" from `http://cran.r-project.org/web/packages/rgdal/index.html`
+- from a terminal:
+```shell
+cd ~/Downloads/
+sudo R CMD INSTALL -configure-args'-with-proj-include=/usr/local/lib' rgdal_0.9-1.tar.gz
+```
+Then restart R or RStudio
+
+
 Futher user documentation is in the R help and the vignettes:
 
 ```r
 vignette(package = "sensorweb4R")
-vignette("<name of the vignette to open")
+vignette("<name of the vignette to open>")
+```
+
+When installed from source or GitHub, run the command [Rd2pdf](http://cran.r-project.org/doc/manuals/R-exts.html#index-R-CMD-Rd2pdf) in the parent directory of the package to create the reference manual, which describes all functions in the package:
+
+```
+R CMD Rd2pdf sensorweb4R
 ```
 
 ## Development
