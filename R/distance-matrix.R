@@ -157,24 +157,6 @@ nearest.Station <- function(x, all, dm = NULL, n = 1, filter.fun = NULL, ...) {
     DistanceStation(all[top], dm[idx, top])
 }
 
-
-distanceMatrix.SpatialPoints <- function(x, ...) {
-    n <- length(x)
-    dm <- matrix(0, ncol=n, nrow=n)
-    for (i in 1:n) {
-        for (j in i:n) {
-            dm[i,j] <- dm[j,i] <-
-                geosphere::distVincentyEllipsoid(x[i,], x[j,])
-        }
-    }
-    return(as.dist(dm));
-}
-
-distanceMatrix.Station <- function(x, ...)
-    distanceMatrix(geometry(x))
-
-
-
 #' @export
 #' @rdname distance-matrix-methods
 setGeneric("distance", function(x)
@@ -207,12 +189,25 @@ setMethod("nearest",
 setGeneric("distanceMatrix", function(x, ...)
     standardGeneric("distanceMatrix"))
 
+#' @importFrom geosphere distVincentyEllipsoid
 #' @rdname distance-matrix-methods
 setMethod("distanceMatrix",
           signature(x = "SpatialPoints"),
-          distanceMatrix.SpatialPoints)
+          function(x, ...) {
+              require(geosphere)
+              n <- length(x)
+              dm <- matrix(0, ncol=n, nrow=n)
+              for (i in 1:n) {
+                  for (j in i:n) {
+                      dm[i,j] <- dm[j,i] <-
+                          geosphere::distVincentyEllipsoid(x[i,], x[j,])
+                  }
+              }
+              return(as.dist(dm));
+          })
 
 #' @rdname distance-matrix-methods
 setMethod("distanceMatrix",
           signature(x = "Station"),
-          distanceMatrix.Station)
+          function(x, ...)
+              distanceMatrix(geometry(x)))

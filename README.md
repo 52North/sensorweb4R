@@ -16,6 +16,10 @@ Continue:
 ```r
 devtools::install_github("52North/sensorweb4R")
 ```
+To also install the vignettes run:
+```r
+devtools::install_github("52North/sensorweb4R", build_vignettes = TRUE)
+```
 
 Alternatively, you can download the source code and install the package from source. For this to work must have both [git](http://git-scm.com/downloads) and R (see documentation [here](http://cran.r-project.org/bin/windows/base/rw-FAQ.html#Rcmd-is-not-found-in-my-PATH_0021) for Windows) on your path. Then run the following commands:
 
@@ -25,8 +29,6 @@ R CMD INSTALL sensorweb4R
 ```
 
 ## Documentation
-
-### Users
 
 Take a look at the demos to see how to use the package:
 
@@ -41,7 +43,7 @@ For some of the demo's you will need:
 install.packages("maptools")
 install.packages("rgdal")
 ```
-On Fedora/RedHat/CentOS you will need the following yum packages to be able to install ```rgdal```:
+On Fedora/RedHat/CentOS you will need the following yum packages to be able to install `rgdal`:
 
 ```shell
 yum install gdal gdal-devel gdal-static proj-devel proj-epsg
@@ -53,10 +55,6 @@ Futher user documentation is in the R help and the vignettes:
 vignette(package = "sensorweb4R")
 vignette("<name of the vignette to open")
 ```
-
-### Developers 
-
-Developer documentation is in this file ``README.md``.
 
 ## Development
 

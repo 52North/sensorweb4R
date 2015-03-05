@@ -35,17 +35,26 @@ phe.pollutant <- sample(phe.pollutant[!id(phe.pollutant) %in% id(phe.wind)], 1)
 ts <- timeseries.by.phenomena(e, rbind2(phe.wind, phe.pollutant), station = station)
 
 # get the data
-data <- getData(ts)
+time <- strptime(c("2015-01-01T00:00:00Z",
+                   "2015-01-31T23:59:59Z"),
+                 "%Y-%m-%dT%H:%M:%OS", tz = "UTC")
+
+data <- getData(ts, timespan = lubridate::new_interval(time[1], time[2]))
 
 # filter out measurements with partial data
 # and convert the data to a data.frame
 times <- unique(sort(do.call(c, lapply(data, time))))
 data <- data.frame(lapply(data, function(x) value(x)[match(times, time(x))]))
-names(data) <- sapply(ts, function(x) switch(id(phenomenon(x)), "61102" = "wd", "61110" = "ws",id(phenomenon(x))))
+names(data) <- sapply(ts, function(x) switch(id(phenomenon(x)),
+                                             "61102" = "wd",
+                                             "61110" = "ws",
+                                             id(phenomenon(x))))
 data$date <- times
 
 # filter out invalid values
 data <- data[data[[id(phe.pollutant)]] != -9999.0,]
+data <- data[data[["wd"]] != -9999.0,]
+data <- data[data[["ws"]] != -9999.0,]
 
 data$wd <- data$wd/10
 

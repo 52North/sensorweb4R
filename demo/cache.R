@@ -9,7 +9,7 @@ clear.cache()
 
 # make a query to fill the cache
 e <- as.Endpoint("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/")
-ts <- random.Timeseries(e)
+srv <- fetch(services(e))
 
 # correct access using function
 get.cache()

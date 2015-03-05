@@ -61,7 +61,7 @@ format.interval <- function(x)
 as.timespan.parameter <- function(x, ...) {
     if (is.null(x) || is.na(x)) NULL
     else if (is.character(x)) x
-    else if (is.interval(x)) format.interval(x)
+    else if (lubridate::is.interval(x)) format.interval(x)
     else x
 }
 

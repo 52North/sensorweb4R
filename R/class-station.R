@@ -52,11 +52,13 @@ Station <- function(id = character(), label = NULL,
         geometry = geometry)
 }
 
+#' @import sp
 #' @rdname accessor-methods
 setMethod("geometry",
           signature(obj = "Station"),
           function(obj) obj@geometry)
 
+#' @import sp
 #' @rdname accessor-methods
 setMethod("geometry<-",
           signature(x = "Station",
@@ -75,7 +77,7 @@ rbind2.Station <- function(x, y) {
     Station(endpoint = rbind2(endpoint(x), endpoint(y)),
             id = c(id(x), id(y)),
             label = c(label(x), label(y)),
-            geometry = rbind2(geometry(x), geometry(y)))
+            geometry = rbind2(sp::geometry(x), sp::geometry(y)))
 }
 
 #' @rdname rbind2-methods
@@ -102,23 +104,23 @@ setMethod("rep", signature(x = "Station"), function(x, ...)
 setMethod("rep",
           signature(x = "SpatialPoints"),
           function(x, ...) {
-              coords <- coordinates(x)
+              coords <- sp::coordinates(x)
               ncoords <- matrix(rep(coords, ...), ncol = dim(coords)[[2]])
               dimnames(ncoords) <- list(NULL, dimnames(coords)[[2]])
-              SpatialPoints(ncoords, CRS(proj4string(x)), bbox(x))
+              sp::SpatialPoints(ncoords, sp::CRS(sp::proj4string(x)), sp::bbox(x))
           })
 
 #' @import sp
 rbind2.SpatialPoints <- function(x, y) {
     x <- as(x, "SpatialPoints")
     y <- as(y, "SpatialPoints")
-    coordsx <- coordinates(x)
-    coordsy <- coordinates(y)
+    coordsx <- sp::coordinates(x)
+    coordsy <- sp::coordinates(y)
     if (dim(coordsx)[[2]] != dim(coordsy)[[2]])
         stop("Incompatible coordinate dimensions")
-    if (proj4string(x) != proj4string(y))
+    if (sp::proj4string(x) != sp::proj4string(y))
         stop("Incompatible coordinate reference systems")
-    SpatialPoints(rbind(coordsx, coordsy), CRS(proj4string(x)))
+    sp::SpatialPoints(rbind(coordsx, coordsy), sp::CRS(sp::proj4string(x)))
 }
 
 #' @rdname rbind2-methods
@@ -137,10 +139,10 @@ setMethod("rbind2", signature("ANY", "SpatialPoints"),
 setMethod("rep",
           signature(x = "SpatialPoints"),
           function(x, ...) {
-              coords <- coordinates(x)
+              coords <- sp::coordinates(x)
               ncoords <- matrix(rep(coords, ...), ncol = dim(coords)[[2]])
               dimnames(ncoords) <- list(NULL, dimnames(coords)[[2]])
-              SpatialPoints(ncoords, CRS(proj4string(x)), bbox(x))
+              sp::SpatialPoints(ncoords, sp::CRS(sp::proj4string(x)), sp::bbox(x))
           })
 
 
@@ -148,13 +150,13 @@ setMethod("rep",
 #' @rdname accessor-methods
 setMethod("coordinates",
           signature(obj = "Station"),
-          function(obj, ...) coordinates(obj@geometry))
+          function(obj, ...) sp::coordinates(obj@geometry))
 
 #' @import sp
 #' @rdname accessor-methods
 setMethod("bbox",
           signature(obj = "Station"),
-          function(obj) bbox(obj@geometry))
+          function(obj) sp::bbox(obj@geometry))
 
 #' @export
 #' @import sp
@@ -163,6 +165,6 @@ as.SpatialPointsDataFrame <- function(x)
 
 setAs("Station", "SpatialPointsDataFrame",
       function(from)
-          SpatialPointsDataFrame(coords = geometry(from),
+          SpatialPointsDataFrame(coords = sp::geometry(from),
                                  data = data.frame(id = id(from),
                                                    label = label(from))))

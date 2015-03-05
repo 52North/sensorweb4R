@@ -85,3 +85,16 @@ setMethod("Compare",
           signature("TVP", "TVP") ,
           function(e1, e2) callGeneric(time(e1), time(e2)))
 
+
+#' @export
+hist.TVP <- function(x, ...) hist(value(x))
+
+setMethod("hist", signature("TVP"),
+          function(x, ...) hist.TVP(x))
+
+#' @export
+summary.TVP <- function(object, ...)
+    summary(as.data.frame(object), ...)
+
+setMethod("summary", signature("TVP"),
+          function(object, ...) summary.TVP(object, ...))

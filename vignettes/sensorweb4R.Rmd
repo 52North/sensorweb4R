@@ -1,6 +1,8 @@
 ---
-title: "sensorweb4R: Accessing Sensor Web Serverices from R"
-author: "Daniel Nuest"
+title: "sensorweb4R: Accessing Sensor Web Services from R"
+author:
+    - Daniel Nuest
+    - Chrisitan Autermann
 date: "`r Sys.Date()`"
 output:
     rmarkdown::html_vignette:
@@ -44,7 +46,7 @@ The `sensorweb4R` package is not on CRAN yet, so please download and install the
 
 ```{r, eval = FALSE}
 require(devtools)
-devtools::install_github("52North/sensorweb4R")
+devtools::install_github("52North/sensorweb4R", build_vignettes = TRUE)
 ```
 
 Then load the package and take a look at the help and the vignette:
@@ -69,16 +71,26 @@ demo("ircel-celine")
 Some konwn API endpoints are build in to start exploring sensor web data on your own:
 
 ```{r}
-sensorweb4R:::example.endpoints()
+sensorweb4R::example.endpoints()
 ```
 
 ## Terms and Definitions
 
 * **Sensor Web** and **OGC Sensor Web Enablement (SWE)**: "The concept of the "sensor web" is a type of sensor network that is especially well suited for environmental monitoring. [...] OGC's Sensor Web Enablement (SWE) framework defines a suite of web service interfaces and communication protocols abstracting from the heterogeneity of sensor (network) communication." [1]
-* **Timeseries**: <!-- TODO -->
-* **Station**: <!-- TODO -->
-* **Endpoint**: <!-- TODO -->
-* **Service**: <!-- TODO -->
+* **Endpoint**: An endpoints represents an instance of a Timeseries API.
+* **Service**: The endpoint encapsulates multiple data providers (e.g. SOS). These are represented as services.
+
+
+* **Station**: A station is a concept that does not directly exist in the SOS object model. It can be seen as a stationary sensor with an geometry that can aggregate one or multiple offerings, features, phenomenons and procedures and thus can have multiple timeseries.
+
+* **Timeseries**: Timeseries are the central part of the API. They contain series of data over time that is associated with an offering, feature, phenomenon and procedure.
+* **Domain resources**: Domain resources are concepts, that are mapped one-to-one to their respective counterpart in the SOS model. To allow the API to provide data of multiple services, new identifiers are generated for these objects, while original identifier, which is only unique in the context of a single service, becomes the `domainId`.
+
+    * **Offering**: An abstract concept similar to layers in mapping services. It allows to group observations of different phenomenons or features (and for SOS v1.0.0 also procedures).
+    * **Feature**: The spatial object of which the observation is made.
+    * **Phenomenon**: The observed occurence.
+    * **Procedure**: The physical sensor that observed the phenomenon, or abstract process that processed the observations.
+* **Category**: A concept to group multiple timeseries together.
 
 
 # Accessing the Timeseries API
@@ -105,10 +117,22 @@ http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api-doc/index.ht
 
 ```{r}
 # connect
+endpoint <- example.endpoints()[1]
 
 # get all services
+srv <- services(endpoint)
+
+# get the names of the services
+label(srv)
+
+# subset services
+srv <- srv[5]
 
 # get all phenomena
+phe <- phenomena(endpoint)
+
+# get the names of the phenomena
+head(label(phe))
 ```
 
 
@@ -116,19 +140,74 @@ http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api-doc/index.ht
 
 ```{r}
 # get all stations
+sta <- stations(srv)
+head(label(sta))
 
 # filter by category
+cat <- categories(srv)
+sta <- stations(srv, category = cat[1])
+head(label(sta))
+```
+
+Stations are spatial objects containing a geometry:
+```{r}
+geom <- sp::geometry(sta)
+head(geom)
 ```
 
 
 ### Exploring timeseries of a service
 
-```{r}
+```{r, eval=FALSE}
 # get all timeseries
+ts <- timeseries(srv)
+```
+```{r}
 
-# filter by station (object and id)
+# filter by station
+ts <- timeseries(sta[1])
+# equivalent
+# sta <- timeseries(endpoint, station = sta[1])
+# sta <- timeseries(endpoint, station = id(sta[1]))
 
-# filter by category (object and id)
+
+# filter by category
+ts <- timeseries(endpoint, category = cat[1])[1:2]
+# equivalent:
+# ts <- timeseries(endpoint, category = id(cat[2]))
+```
+
+### Accessing relations and attributes
+
+Timeseries are complex classes with relations to nearly all other classes:
+```{r}
+str(ts, max.level = 2)
+```
+
+To save bandwith, most relations are not filled:
+```{r}
+category(ts)
+```
+
+If you really need the meta data you can `fetch` them:
+```{r}
+ts <- fetch(ts)
+```
+
+Now you can access the relations using the respective getter:
+
+* `phenomenon(ts)`
+* `service(ts)`
+* `offering(ts)`
+* `feature(ts)`
+* `procedure(ts)`
+* `category(ts)`
+* `station(ts)`
+* `procedure(ts)`
+
+E.g. to get the procedures of the timeseries:
+```{r}
+label(procedure(ts))
 ```
 
 ### Searching by keyword
@@ -142,16 +221,22 @@ Not implemented yet.
 ### Downloading data
 
 ```{r}
-# get data of single timeseries
+# as the timespan of the series is quite large...
+lubridate::duration(lubridate::new_interval(time(firstValue(ts)), 
+                                            time(lastValue(ts))))
 
-# filter by category, station, phenomena, ...
-
-# temporal filters (using lubridate): this year, last month, last x hours, january 2014, 2013
+# ... we should filter the data we want
+# e.g. the last common week of data
+last <- min(time(lastValue(ts)))
+time <- lubridate::as.interval(lubridate::weeks(1), last - lubridate::weeks(1))
+data <- getData(ts, timespan = time)
+str(data)
 ```
+
+Have a look at `?lubridate` for further examples on how to express time intervals in `R`.
 <!--
-render nice tables with
 ```{r, results = "asis"}
-pander::pandoc.table(iris[1:3, 1:4])
+pander::pandoc.table(as.data.frame(data[[1]]))
 ```
 -->
 
@@ -159,14 +244,31 @@ pander::pandoc.table(iris[1:3, 1:4])
 
 ```{r}
 # coercion to timeseries 
+ts <- ts[1]
+data <- data[[1]]
 
-# simple plot
+xlab <- "Time"
+ylab <- paste0(names(phenomenon(ts)), " (", uom(ts), ")")
+main <- names(ts)
+
+# convert to zoo
+x <- zoo::as.zoo(data)
+plot(x, main = main, xlab = xlab, ylab = ylab)
+
+# convert to xts
+x <- xts::as.xts(data)
+plot(x, main = main, xlab = xlab, ylab = ylab)
 
 # coercion to data.frame
+x <- as.data.frame(data)
+plot(x, main = main, xlab = xlab, ylab = ylab)
 
 # summary and histogram
+summary(data)
+hist(data)
 
 # coercion to Spatial stuff
+as.SpatialPointsDataFrame(sta)
 ```
 
 ### Currently unsupported features of the timeseries API
@@ -174,6 +276,19 @@ pander::pandoc.table(iris[1:3, 1:4])
 * Collections
 * Server-side plots
 
+### Caching
+
+All requests to resources of the API are cached in a global `list` that can be accessed using `get.cache` and `set.cache`. The list contains the parsed JSON responses of the service for each resource:
+
+```{r}
+get.cache.keys()
+```
+
+```{r}
+str(get.cache.value(get.cache.keys()[1]))
+```
+
+For more information consult `?cache`.
 
 # Options
 
