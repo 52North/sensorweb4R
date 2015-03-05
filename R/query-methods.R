@@ -101,8 +101,16 @@ get.json <- function(url, ...) {
     q <- ifelse(!is.null(p$query), do.call(as.query.string, p$query), "")
     futile.logger::flog.debug("Requesting %s?%s", url, q)
     response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
-    httr::stop_for_status(response)
-    jsonlite::fromJSON(httr::content(response, "text"))
+    content <- httr::content(response, "text")
+
+    tryCatch(httr::stop_for_status(response),
+             error = function(err) {
+                 message <- paste0("Error requesting '",url,"?",q,"': ", err, "\n", content)
+                 futile.logger::flog.error(message);
+                 stop(message)
+             })
+
+    jsonlite::fromJSON(content)
 }
 
 get.and.parse <- function(endpoint, query, fun.url, fun.parse)
