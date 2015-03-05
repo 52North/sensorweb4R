@@ -368,7 +368,7 @@ setMethod("fetch",
 
               x
           })
-
+#' @param generalize Generalize the data on server side.
 #' @rdname query-methods
 setMethod("getData",
           signature(x = "Timeseries"),
