@@ -49,16 +49,15 @@ On Fedora/RedHat/CentOS you will need the following yum packages to be able to i
 yum install gdal gdal-devel gdal-static proj-devel proj-epsg
 ```
 
-On Mac OS X you will need GDAL e.g. precompiled from here:
-http://www.kyngchaos.com/software/frameworks
-Depending on the version of the OS, you will probably not find a suitable rgdal in CRAN. To install manually:
-- download "package source" from http://cran.r-project.org/web/packages/rgdal/index.html
+On Mac OS X you will need GDAL e.g. precompiled from [here](http://www.kyngchaos.com/software/frameworks).
+Depending on the version of the OS, you will probably not find a suitable `rgdal` in CRAN. To install manually:
+- download "package source" from `http://cran.r-project.org/web/packages/rgdal/index.html`
 - from a terminal:
 ```shell
 cd ~/Downloads/
 sudo R CMD INSTALL -configure-args'-with-proj-include=/usr/local/lib' rgdal_0.9-1.tar.gz
 ```
-restart R or RStudio
+Then restart R or RStudio
 
 
 Futher user documentation is in the R help and the vignettes:
