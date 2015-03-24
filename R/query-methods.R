@@ -291,7 +291,7 @@ setMethod("fetch",
               serviceURL(x) <- fetched$serviceUrl
               version(x) <- fetched$version
               type(x) <- fetched$type
-              supportsFirstLatest(x) <- fetched$supportsFirstLatest
+              supportsFirstLatest(x) <- as.logical(fetched$supportsFirstLatest)
               quantities(x) <- as.data.frame(t(sapply(tmp, "[[", "quantities")))
               x
           })
