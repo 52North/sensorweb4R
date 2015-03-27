@@ -30,6 +30,8 @@ R CMD INSTALL sensorweb4R
 
 ## Documentation
 
+### Demos
+
 Take a look at the demos to see how to use the package:
 
 ```r
@@ -44,6 +46,7 @@ install.packages("maptools")
 install.packages("mapdata")
 install.packages("rgdal")
 ```
+
 On Fedora/RedHat/CentOS you will need the following yum packages to be able to install `rgdal`:
 
 ```shell
@@ -58,17 +61,21 @@ Depending on the version of the OS, you will probably not find a suitable `rgdal
 cd ~/Downloads/
 sudo R CMD INSTALL -configure-args'-with-proj-include=/usr/local/lib' rgdal_0.9-1.tar.gz
 ```
-Then restart R or RStudio
 
+Then restart R or RStudio.
+
+
+### Vignette
 
 Futher user documentation is in the R help and the vignettes:
 
 ```r
 vignette(package = "sensorweb4R")
-vignette("<name of the vignette to open>")
 ```
 
-When installed from source or GitHub, run the command [Rd2pdf](http://cran.r-project.org/doc/manuals/R-exts.html#index-R-CMD-Rd2pdf) in the parent directory of the package to create the reference manual, which describes all functions in the package:
+### Reference manual
+
+When installed from source or GitHub, run the command [Rd2pdf](http://cran.r-project.org/doc/manuals/R-exts.html#index-R-CMD-Rd2pdf) on the regular command line from the parent directory of the package. This will create the reference manual, which describes all functions in the package:
 
 ```
 R CMD Rd2pdf sensorweb4R
