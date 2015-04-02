@@ -76,22 +76,27 @@ sensorweb4R::example.endpoints()
 
 ## Terms and Definitions
 
-* **Sensor Web** and **OGC Sensor Web Enablement (SWE)**: "The concept of the "sensor web" is a type of sensor network that is especially well suited for environmental monitoring. [...] OGC's Sensor Web Enablement (SWE) framework defines a suite of web service interfaces and communication protocols abstracting from the heterogeneity of sensor (network) communication." [1]
+**Sensor Web** and **OGC Sensor Web Enablement (SWE)**: "The concept of the "sensor web" is a type of sensor network that is especially well suited for environmental monitoring. [...] OGC's Sensor Web Enablement (SWE) framework defines a suite of web service interfaces and communication protocols abstracting from the heterogeneity of sensor (network) communication." [1]
+
+The following are abstract concepts from Sensor Observation Service Specification as well as the Timeseries API. They can be used differently in specific instances of SensorWeb services. For getting started with a new service endpoint in `sensorweb4R`, stations, timeseries and phenomenons are most relevant.
+
 * **Endpoint**: An endpoints represents an instance of a Timeseries API.
 * **Service**: The endpoint encapsulates multiple data providers (e.g. SOS). These are represented as services.
-
-
-* **Station**: A station is a concept that does not directly exist in the SOS object model. It can be seen as a stationary sensor with an geometry that can aggregate one or multiple offerings, features, phenomenons and procedures and thus can have multiple timeseries.
-
 * **Timeseries**: Timeseries are the central part of the API. They contain series of data over time that is associated with an offering, feature, phenomenon and procedure.
 * **Domain resources**: Domain resources are concepts, that are mapped one-to-one to their respective counterpart in the SOS model. To allow the API to provide data of multiple services, new identifiers are generated for these objects, while original identifier, which is only unique in the context of a single service, becomes the `domainId`.
-
     * **Offering**: An abstract concept similar to layers in mapping services. It allows to group observations of different phenomenons or features (and for SOS v1.0.0 also procedures).
     * **Feature**: The spatial object of which the observation is made.
     * **Phenomenon**: The observed occurence.
     * **Procedure**: The physical sensor that observed the phenomenon, or abstract process that processed the observations.
-* **Category**: A concept to group multiple timeseries together.
 
+* **Station**: A station is a concept that does not directly exist in the SOS object model. It can be seen as a stationary sensor with an geometry that can aggregate one or multiple offerings, features, phenomena and procedures and thus can have multiple timeseries.
+* **Category**: A category is a concept that does not directly exist the SOS object model. It can be used to arrange multiple timeseries together.
+
+### Examples
+
+#### Hydrological sensor network
+Procedures are the abstract processes (e.g. daily average) that generate the observations. These are the same accros all measurement location in the network which are represented by the feature of interest. At these locations the sensors deliver values for observed properties which are represented by phenomena.
+In this context a station ties together features and all procedures and phenomena existing at this feature to produce a more unified view.
 
 # Accessing the Timeseries API
 
