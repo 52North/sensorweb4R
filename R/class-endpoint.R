@@ -173,9 +173,9 @@ random.Timeseries <- function(e) {
 
 #' Example API endpoints.
 #'
-#' \code{sensorweb_api_endpoints} returns an instance of \linkS4class{Endpoint}
+#' \code{example.endpoints} returns an instance of \linkS4class{Endpoint}
 #' that can be used for testing.
-#' @param the name of the endpoint
+#' @param the optional name of the endpoint
 #' @return R object with the further endpoints offered by the service or the
 #'         endpoint with the specified name
 #' @author Daniel Nuest \email{d.nuest@@52north.org}
@@ -186,6 +186,7 @@ random.Timeseries <- function(e) {
 #' @examples
 #' example.endpoints()
 #' services(example.endpoints()[1])
+#' example.endpoints("UoL")
 example.endpoints <- function(name) {
     e <- Endpoint(url = c("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/",
                           "http://sosrest.irceline.be/api/v1/",
