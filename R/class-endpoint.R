@@ -175,8 +175,9 @@ random.Timeseries <- function(e) {
 #'
 #' \code{sensorweb_api_endpoints} returns an instance of \linkS4class{Endpoint}
 #' that can be used for testing.
-#'
-#' @return R object with the further endpoints offered by the service
+#' @param the name of the endpoint
+#' @return R object with the further endpoints offered by the service or the
+#'         endpoint with the specified name
 #' @author Daniel Nuest \email{d.nuest@@52north.org}
 #' @author Christian Autermann \email{c.autermann@@52north.org}
 #'
@@ -185,15 +186,17 @@ random.Timeseries <- function(e) {
 #' @examples
 #' example.endpoints()
 #' services(example.endpoints()[1])
-example.endpoints <- function() {
-    Endpoint(url = c("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/",
-                     "http://sosrest.irceline.be/api/v1/",
-                     "http://www.fluggs.de/sos2/api/v1/",
-                     "http://sensors.geonovum.nl/sos/api/v1/",
-                     "http://www57.lamp.le.ac.uk/52n-sos-webapp/api/v1/"),
-             label = c("52N Demo",
-                       "IRCEL-CELINE",
-                       "WV",
-                       "Geonovum",
-                       "University of Leicester"))
+example.endpoints <- function(name) {
+    e <- Endpoint(url = c("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/",
+                          "http://sosrest.irceline.be/api/v1/",
+                          "http://www.fluggs.de/sos2/api/v1/",
+                          "http://sensors.geonovum.nl/sos/api/v1/",
+                          "http://www57.lamp.le.ac.uk/52n-sos-webapp/api/v1/"),
+                  label = c("52N Demo",
+                            "IRCEL-CELINE",
+                            "WV",
+                            "Geonovum",
+                            "UoL"))
+    if (missing(name)) e
+    else e[label(e) == name]
 }
