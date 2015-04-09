@@ -112,6 +112,7 @@ get.json <- function(url, ...) {
     content <- httr::content(response, "text")
     tryCatch(httr::stop_for_status(response),
              error = function(err) {
+                 if (httr::status_code(response) == 404) return(NULL)
                  message <- paste0("Error requesting '", url, "?", q, "': ", err, "\n", content)
                  futile.logger::flog.error(message);    str(url)
                  stop(message)
