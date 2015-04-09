@@ -189,6 +189,11 @@ example.endpoints <- function() {
     Endpoint(url = c("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/",
                      "http://sosrest.irceline.be/api/v1/",
                      "http://www.fluggs.de/sos2/api/v1/",
-                     "http://sensors.geonovum.nl/sos/api/v1/"),
-             label = c("52N Demo", "IRCEL-CELINE", "WV", "Geonovum"))
+                     "http://sensors.geonovum.nl/sos/api/v1/",
+                     "http://www57.lamp.le.ac.uk/52n-sos-webapp/api/v1/"),
+             label = c("52N Demo",
+                       "IRCEL-CELINE",
+                       "WV",
+                       "Geonovum",
+                       "University of Leicester"))
 }
