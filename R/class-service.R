@@ -43,9 +43,8 @@ Service <- function(id = character(),
                     supportsFirstLatest = NULL,
                     quantities = NULL,
                     endpoint = NULL) {
-
+    id <- as.character(id)
     len <- length(id)
-
     label <- stretch(len, label, as.character(NA), as.character)
     serviceURL <- stretch(len, serviceURL, as.character(NA), as.character)
     version <- stretch(len, version, as.character(NA), as.character)

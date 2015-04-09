@@ -4,18 +4,23 @@
 \alias{example.endpoints}
 \title{Example API endpoints.}
 \usage{
-example.endpoints()
+example.endpoints(name)
+}
+\arguments{
+\item{the}{optional name of the endpoint}
 }
 \value{
-R object with the further endpoints offered by the service
+R object with the further endpoints offered by the service or the
+        endpoint with the specified name
 }
 \description{
-\code{sensorweb_api_endpoints} returns an instance of \linkS4class{Endpoint}
+\code{example.endpoints} returns an instance of \linkS4class{Endpoint}
 that can be used for testing.
 }
 \examples{
 example.endpoints()
 services(example.endpoints()[1])
+example.endpoints("UoL")
 }
 \author{
 Daniel Nuest \email{d.nuest@52north.org}

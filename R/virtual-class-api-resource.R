@@ -170,8 +170,13 @@ setMethod("resourceURL",
           signature(x = "ApiResource"),
           function(x) {
               if (length(x) == 0) return(character())
-              paste(resourceURL(endpoint(x)),
-                    collection.name(x),
-                    id(x),
-                    sep = "/")
+              ifelse(is.na(x), NA,
+                     paste(resourceURL(endpoint(x)),
+                           collection.name(x),
+                           id(x),
+                           sep = "/"))
           })
+
+setMethod("is.na",
+          signature(x = "ApiResource"),
+          function(x) is.na(id(x)))
