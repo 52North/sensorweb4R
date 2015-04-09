@@ -33,7 +33,10 @@ setClassUnion("TVP_or_NULL", c("TVP", "NULL"))
 #' @describeIn TVP-class Constructs a new \code{TVP}.
 TVP <- function(time = character(), value = numeric()) {
     len <- max(length(time), length(value))
-    time <- rep(as.POSIXct(as.character(time)), length.out = len)
+    if (!"POSIXct" %in% class(time)) {
+        time <- as.POSIXct(as.character(time))
+    }
+    time <- rep(time, length.out = len)
     value <- rep(as.numeric(value), length.out = len)
     return(new("TVP", time = time, value = value))
 }

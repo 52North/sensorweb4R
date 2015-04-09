@@ -21,7 +21,14 @@ stop.if.no.query <- function(query) {
 
 as.parameter.list <- function(x) {
     if (is.null(x) || length(x) == 0) NULL
-    else paste(x, collapse=",")
+    else paste(x, collapse = ",")
+}
+
+getIds <- function(x, ...) {
+    ids <- path(x, ...)
+    ids <- sapply(ids, function(x)
+        if (is.null(x) || is.na(x)) NA else x)
+    as.character(ids)
 }
 
 #' Query Helper
@@ -80,33 +87,34 @@ as.query.string <- function(...) {
 
 fetch.resourceURL <- function(x, ...) {
     args <-  list(...)
-    query <- if(is.null(args$query)) list()
+    query <- if (is.null(args$query)) list()
     else do.call(as.query.string, args$query)
 
     tofetch <- unique(x)
-
-    lapply(tofetch[!(paste(tofetch, query, sep="?") %in% get.cache.keys())],
+    cached <- paste(tofetch, query, sep = "?") %in% get.cache.keys()
+    tofetch <- tofetch[!cached]
+    lapply(tofetch,
            function(url) {
-               key <- paste(url, query, sep="?")
-               value <- get.json(url, ...)
+               key <- paste(url, query, sep = "?")
+               value <- if (is.na(url)) list() else get.json(url, ...)
                set.cache.value(key, value)
            })
-
-    lapply(paste(x, query, sep="?"),
+    lapply(paste(x, query, sep = "?"),
            function(url) get.cache.value(url))
 }
 
 get.json <- function(url, ...) {
+    if (is.null(url) || is.na(url)) return(NULL)
     p <- list(...)
     q <- ifelse(!is.null(p$query), do.call(as.query.string, p$query), "")
     futile.logger::flog.debug("Requesting %s?%s", url, q)
-    response <- httr::GET(url, httr::add_headers(Accept="application/json"), ...)
+    response <- httr::GET(url, httr::add_headers(Accept = "application/json"), ...)
     content <- httr::content(response, "text")
-
     tryCatch(httr::stop_for_status(response),
              error = function(err) {
-                 message <- paste0("Error requesting '",url,"?",q,"': ", err, "\n", content)
-                 futile.logger::flog.error(message);
+                 if (httr::status_code(response) == 404) return(NULL)
+                 message <- paste0("Error requesting '", url, "?", q, "': ", err, "\n", content)
+                 futile.logger::flog.error(message);    str(url)
                  stop(message)
              })
 
@@ -118,13 +126,13 @@ get.and.parse <- function(endpoint, query, fun.url, fun.parse)
 
 
 path <- function(x, path, ...) {
-    x <- lapply(x, "[[", path)
+    x <- lapply(x, '[[', path)
     if (nargs() == 2) x else Recall(x, ...)
 }
 
 simplify.list <- function(x, path) {
     if (!missing(path)) x <- lapply(x, "[[", path)
-    do.call(mapply, c(list(FUN=c, SIMPLIFY=F), x))
+    do.call(mapply, c(list(FUN = c, SIMPLIFY = F), x))
 }
 
 #' @rdname query-methods
@@ -287,12 +295,19 @@ setMethod("fetch",
           function(x, ...) {
               tmp <- fetch.resource(x)
               fetched <- simplify.list(tmp)
-              label(x) <- fetched$label
-              serviceURL(x) <- fetched$serviceUrl
-              version(x) <- fetched$version
-              type(x) <- fetched$type
+              label(x) <- as.character(fetched$label)
+              serviceURL(x) <- as.character(fetched$serviceUrl)
+              version(x) <- as.character(fetched$version)
+              type(x) <- as.character(fetched$type)
               supportsFirstLatest(x) <- as.logical(fetched$supportsFirstLatest)
-              quantities(x) <- as.data.frame(t(sapply(tmp, "[[", "quantities")))
+
+              quantities <- lapply(tmp, "[[", "quantities")
+              quantities <- lapply(quantities, function(x)
+                  if (is.null(x) || is.na(x))
+                      default.quantities(1)
+                  else as.data.frame(t(x))
+              )
+              quantities(x) <- do.call(rbind, quantities)
               x
           })
 
@@ -304,8 +319,8 @@ setMethod("fetch",
               fetched <- simplify.list(tmp)
               service <- Service(endpoint = endpoint(x),
                                  id = simplify.list(tmp, "service")$id)
-              label(x) <- fetched$label
-              domainId(x) <- fetched$domainId
+              label(x) <- as.character(fetched$label)
+              domainId(x) <- as.character(fetched$domainId)
               service(x) <- fetch(service)
               x
           })
@@ -315,10 +330,11 @@ setMethod("fetch",
           signature(x = "Category"),
           function(x, ...) {
               tmp <- fetch.resource(x)
+
               fetched <- simplify.list(tmp)
-              service <- Service(endpoint = endpoint(x),
-                                 id = simplify.list(tmp, "service")$id)
-              label(x) <- fetched$label
+              service <- getIds(tmp, "service", "id")
+              service <- Service(endpoint = endpoint(x), id = service)
+              label(x) <- as.character(fetched$label)
               service(x) <- fetch(service)
               x
           })
@@ -342,26 +358,26 @@ setMethod("fetch",
           function(x, ...) {
               tmp <- fetch.resource(x)
 
-              label(x) <- as.character(path(tmp, "label"))
-              uom(x) <- as.character(path(tmp, "uom"))
+              label(x) <- sapply(path(tmp, "label"), as.character)
+              uom(x) <- sapply(path(tmp, "uom"), as.character)
 
-              station(x) <- fetch(Station(id = as.character(path(tmp, "station", "properties", "id")), endpoint = endpoint(x)))
-              service(x) <- fetch(Service(id = as.character(path(tmp, "parameters", "service", "id")), endpoint = endpoint(x)))
-              offering(x) <- fetch(Offering(id = as.character(path(tmp, "parameters", "offering", "id")), endpoint = endpoint(x)))
-              #feature(x) <- fetch(Feature(id = as.character(path(tmp, "parameters", "feature", "id")), endpoint = endpoint(x)))
-              procedure(x) <- fetch(Procedure(id = as.character(path(tmp, "parameters", "procedure", "id")), endpoint = endpoint(x)))
-              phenomenon(x) <- fetch(Phenomenon(id = as.character(path(tmp, "parameters", "phenomenon", "id")), endpoint = endpoint(x)))
-              category(x) <- fetch(Category(id = as.character(path(tmp, "parameters", "category", "id")), endpoint = endpoint(x)))
+              station(x) <- fetch(Station(id = getIds(tmp, "station", "properties", "id"), endpoint = endpoint(x)))
+              service(x) <- fetch(Service(id = getIds(tmp, "parameters", "service", "id"), endpoint = endpoint(x)))
+              feature(x) <- fetch(Feature(id = getIds(tmp, "parameters", "feature", "id"), endpoint = endpoint(x)))
+              offering(x) <- fetch(Offering(id = getIds(tmp, "parameters", "offering", "id"), endpoint = endpoint(x)))
+              procedure(x) <- fetch(Procedure(id = getIds(tmp, "parameters", "procedure", "id"), endpoint = endpoint(x)))
+              phenomenon(x) <- fetch(Phenomenon(id = getIds(tmp, "parameters", "phenomenon", "id"), endpoint = endpoint(x)))
+              category(x) <- fetch(Category(id = getIds(tmp, "parameters", "category", "id"), endpoint = endpoint(x)))
 
               list.as.numeric <- function(x)
                   sapply(x, function(x)
-                      if(is.null(x)) NA else x)
+                      if (is.null(x)) NA else x)
 
               list.as.tvp <- function(x) {
                   ts <- list.as.numeric(path(x, "timestamp"))
                   v <- list.as.numeric(path(x, "value"))
                   values <- list(timestamp = ts, value = v)
-                  TimeseriesData.parse(list(values=values))
+                  TimeseriesData.parse(list(values = values))
               }
 
               list.as.rv <- function(x) {
@@ -376,6 +392,7 @@ setMethod("fetch",
 
               x
           })
+
 #' @param generalize Generalize the data on server side.
 #' @rdname query-methods
 setMethod("getData",
@@ -385,6 +402,6 @@ setMethod("getData",
                    timespan = NULL, ...) {
               query <- list(generalize = as.logical.parameter(generalize),
                             timespan = as.timespan.parameter(timespan))
-              tmp <- fetch.resourceURL(getDataURL(x), query=query)
+              tmp <- fetch.resourceURL(getDataURL(x), query = query)
               lapply(tmp, TimeseriesData.parse)
           });
