@@ -175,3 +175,7 @@ setMethod("resourceURL",
                     id(x),
                     sep = "/")
           })
+
+setMethod("is.na",
+          signature(x = "ApiResource"),
+          function(x) is.na(id(x)))
