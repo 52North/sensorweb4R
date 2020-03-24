@@ -91,7 +91,7 @@ devtools::document()
 
 ## Contact / Support
 
-Please direct support questions to the 52°North Sensor Web Community mailing list/forum: http://sensorweb.forum.52north.org/ (and read the [guidelines](http://52north.org/resources/mailing-list-and-forums/mailinglist-guidelines) beforehand).
+Please direct support questions to the 52°North [Sensor Web Lab mailing list](https://list.52north.org/mailman/listinfo/sensorweb) (and read the [guidelines](https://52north.org/discuss/guidelines/) beforehand).
 
 Add an issue/comment on GitHub if you found a bug or want to collaborate on new features.
 
