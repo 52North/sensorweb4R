@@ -5,3 +5,4 @@ openair2            Openair pollution rose demo
 cache               How to manipulate the request cache
 spatial-coercion    Coercing selected classes to spatial classes
 distance-matrix     Find the five nearest stations
+correlation			Correlation between two timeseries
