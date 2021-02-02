@@ -7,7 +7,7 @@ library(lubridate)
 futile.logger::flog.threshold(futile.logger::DEBUG, name = "sensorweb4R")
 ....("The logger is set to DEBUG level in this demo. Press <Return> to continue.")
 
-e <- as.Endpoint("http://sensorweb.demo.52north.org/sensorwebclient-webapp-stable/api/v1/")
+e <- as.Endpoint("https://geo.irceline.be/sos/api/v1/")
 ....("Created a new endpoint based on a URL. Press <Return> to continue.")
 
 # request a random timeseries from the server (can take a little longer, restart demo if there is an error here)
@@ -25,7 +25,7 @@ names(srv) # same as label(srvs)
 str(srv, max.level = 2)
 
 # find a service by URL
-srv.ircel <- srv[serviceURL(srv) == "http://sos.irceline.be/sos"]
+srv.ircel <- srv[serviceURL(srv) == "https://geo.irceline.be/sos"]
 
 # find a service id via partial label match
 srv.ircel <- subset(srv, grepl(c("IRCEL"), sensorweb4R::label(srv)))
@@ -48,7 +48,7 @@ length(ts)
 id(ts[1:10])
 sensorweb4R::label(ts[1:10])
 ....("Timeseries can be requested for specific services by object... (Press <Return> to continue)")
-ts.2 <- timeseries(e, service = "srv_738111ed219f738cfc85be0c8d87843c")
+ts.2 <- timeseries(e, service = "1")
 length(ts.2)
 names(ts.2[1:10])
 ....("... and by character id. Press <Return> to continue.")
@@ -67,10 +67,10 @@ firstValue(ts.1)
 lastValue(ts.1)
 
 # define a timespan
-time <- "2013-08-01T00:00:00Z/2013-08-02T00:00:00Z"
+time <- "2019-08-01T00:00:00Z/2020-08-01T00:00:00Z"
 
 # or more conveniently using package lubridate
-time <- as.interval(days(1), ymd("2013-08-01"))
+time <- as.interval(days(1), ymd("2020-08-01"))
 
 # get the timeseries data
 data <- getData(ts[1], timespan = time)[[1]]
